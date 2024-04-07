@@ -12,6 +12,8 @@ public class Grafo {
     public Grafo(){
         this.nodoMateria = new ArrayList<Nodo>();;
     }
+
+    //Metodos
     public Nodo agregarMateria (Materia materia){
         Nodo nodoNuevo = new Nodo(materia);
         this.nodoMateria.add(nodoNuevo);
@@ -26,6 +28,26 @@ public class Grafo {
     public void eliminarnodo(Nodo materia){
         this.nodoMateria.remove(materia);
     }
+
+    public void recorrerGrafo() {
+        for (Nodo nodo : nodoMateria) {
+            if (!nodo.esVisitado()) {
+                busqueda(nodo);
+            }
+        }
+    }
+
+    private void busqueda(Nodo nodo) {
+        nodo.setVisitado(true);
+        System.out.println("Visitando nodo: " + nodo.getmateria());
+        for (Arista arista : nodo.getAristas()) {
+            Nodo vecino = arista.getFin();
+            if (!vecino.esVisitado()) {
+                busqueda(vecino);
+            }
+        }
+    }
+
     public void print(){
         for(Nodo n: this.nodoMateria){
             n.printNodo();

@@ -29,21 +29,19 @@ public class Grafo {
         this.nodoMateria.remove(materia);
     }
 
-    public void recorrerGrafo() {
+    public void recorrerYModificarGrafo() {
         for (Nodo nodo : nodoMateria) {
             if (!nodo.esVisitado()) {
-                busqueda(nodo);
+                busquedaYModificacion(nodo);
             }
         }
     }
-
-    private void busqueda(Nodo nodo) {
+    private void busquedaYModificacion(Nodo nodo) {
         nodo.setVisitado(true);
-        System.out.println("Visitando nodo: " + nodo.getmateria());
         for (Arista arista : nodo.getAristas()) {
             Nodo vecino = arista.getFin();
             if (!vecino.esVisitado()) {
-                busqueda(vecino);
+                busquedaYModificacion(vecino);
             }
         }
     }

@@ -4,19 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1f8c2a0-6c89-4b19-b7cf-5e67199c9e80" name="Changes" comment="" />
+    <list default="true" id="923fcf59-8a35-49e9-8ecb-25cb7b737fc9" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0
+  &quot;associatedIndex&quot;: 4
 }</component>
-  <component name="ProjectId" id="2ek8AdIPEFPLUjthRftd2tS8uzQ" />
+  <component name="ProjectId" id="2fPqzarvF0yeDnCOWXlBOGHLKg2" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -24,26 +21,20 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/ro/Desktop/Facultad/2do/2do Cuatri/Poo/final-poo",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+    "last_opened_file_path": "/Users/ro/Desktop/Facultad./2do/2do Cuatri/Poo/Final/final",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a1f8c2a0-6c89-4b19-b7cf-5e67199c9e80" name="Changes" comment="" />
-      <created>1712437075007</created>
+      <changelist id="923fcf59-8a35-49e9-8ecb-25cb7b737fc9" name="Changes" comment="" />
+      <created>1712534551045</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1712437075007</updated>
-      <workItem from="1712437076082" duration="125000" />
+      <updated>1712534551045</updated>
     </task>
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
 </project>

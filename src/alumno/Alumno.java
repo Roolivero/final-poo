@@ -9,7 +9,6 @@ public class Alumno {
     private String dni;
     private LocalDate fechaNacimiento;
 
-
     //Constructor
     public Alumno (String nombre, String apellido, String dni, LocalDate fechaNacimeinto){
         this.setNombre(nombre);

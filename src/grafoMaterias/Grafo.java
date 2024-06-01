@@ -3,6 +3,7 @@ package grafoMaterias;
 import materia.Materia;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Grafo {
     //Artibuto
@@ -29,21 +30,79 @@ public class Grafo {
         this.nodoMateria.remove(materia);
     }
 
-    public void recorrerYModificarGrafo() {
-        for (Nodo nodo : nodoMateria) {
-            if (!nodo.esVisitado()) {
-                busquedaYModificacion(nodo);
+    private Nodo obtenernodo(Materia materia){
+        for (Nodo n : this.getNodoMateria()){
+            if(n.getmateria() == materia){
+                return n;
             }
         }
+        return null;
     }
-    private void busquedaYModificacion(Nodo nodo) {
-        nodo.setVisitado(true);
-        for (Arista arista : nodo.getAristas()) {
-            Nodo vecino = arista.getFin();
-            if (!vecino.esVisitado()) {
-                busquedaYModificacion(vecino);
+
+    public List<Nodo> materiasPorCuatrimestre(int cuatrimestre, int numero){
+        List<Nodo> materiasCuatrimestre = new ArrayList<>();
+        int cuatrimestreInicial = cuatrimestre - numero;
+        if(cuatrimestreInicial >= 0) {
+            for (Nodo nodo : this.getNodoMateria()) {
+                int cuatrimestreMateria = nodo.getmateria().getCuatrimestre();
+                if (cuatrimestreMateria >= cuatrimestreInicial && cuatrimestreMateria < cuatrimestre) {
+                    materiasCuatrimestre.add(nodo);
+                }
+            }
+            return materiasCuatrimestre;
+        } else if(((cuatrimestre <= 4) && (numero == 5)) || ((cuatrimestre <= 2) && (numero == 3))){
+            for (Nodo nodo : this.getNodoMateria()) {
+                int cuatrimestreMateria = nodo.getmateria().getCuatrimestre();
+                if (cuatrimestreMateria >= 0 && cuatrimestreMateria < cuatrimestre) {
+                    materiasCuatrimestre.add(nodo);
+                }
+            }
+            return materiasCuatrimestre;
+        }
+        return materiasCuatrimestre;
+    }
+
+    public List<Nodo> correlativasDirectas(Materia materia) {
+        Nodo nodoBuscado = obtenernodo(materia);
+        List<Nodo> materiasCorrelativas = new ArrayList<>();
+        if (nodoBuscado != null) {
+            for (Arista arista : nodoBuscado.getAristas()) {
+                materiasCorrelativas.add(arista.getFin());
             }
         }
+        return materiasCorrelativas;
+    }
+
+
+    public List<Nodo> predecesores(Materia materia){
+        Nodo nodoBuscado = this.obtenernodo(materia);
+        List<Nodo> anteriores = new ArrayList<>();
+        if (nodoBuscado == null) {
+            return anteriores;
+        }
+        for (Nodo nodo : nodoMateria) {
+            if (!nodo.equals(nodoBuscado)) {
+                dfsPredecesores(nodo, nodoBuscado, anteriores);
+            }
+        }
+        for (Nodo nodo : nodoMateria) {
+            nodo.setVisitado(false);
+        }
+        return anteriores;
+    }
+
+    private void dfsPredecesores(Nodo actual, Nodo destino, List<Nodo> predecesores) {
+        actual.setVisitado(true);
+        for (Arista arista : actual.getAristas()) {
+            Nodo vecino = arista.getFin();
+            if (vecino.equals(destino) && !predecesores.contains(actual)) {
+                predecesores.add(actual);
+            }
+            if (!vecino.getVisitado()) {
+                dfsPredecesores(vecino, destino, predecesores);
+            }
+        }
+        actual.setVisitado(false);
     }
 
     public void print(){
@@ -52,14 +111,6 @@ public class Grafo {
         }
     }
 
-    public Nodo obtenernodo(Materia materia){
-        for (Nodo n : this.nodoMateria){
-            if(n.getmateria() == materia){
-                return n;
-            }
-        }
-        return null;
-    }
     //Setters y getters
     public ArrayList<Nodo> getNodoMateria(){return this.nodoMateria;}
 }

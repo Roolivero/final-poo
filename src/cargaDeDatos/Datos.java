@@ -1,10 +1,13 @@
 package cargaDeDatos;
 
+import alumno.Alumno;
 import carrera.Carrera;
 import libretaUniversitaria.Libreta;
 import materia.Materia;
 import planDeEstudio.PlanEstudio;
 import universidad.Universidad;
+
+import java.time.LocalDate;
 
 public class Datos {
     //Constructor
@@ -40,12 +43,16 @@ public class Datos {
         planA.grafoMaterias(materia3,materia7);
         planA.grafoMaterias(materia9,null);
 
+        Alumno alumno1 = new Alumno("Rocio", "Jofre Olivero", "41789823", LocalDate.of(1999, 12, 22),new Libreta());
+        System.out.println(alumno1);
+
+        planA.inscribirAlumnoMateria(alumno1,materia3);
+
         System.out.println("Las materias con sus correlativas son: ");
         planA.getGrafo().print();
 
-        Libreta libreta1 = new Libreta(planA);
-        System.out.println("Las materias de la libreta universitaria son: ");
-        libreta1.getGrafoNotas().print();
+
+
 
     }
 }

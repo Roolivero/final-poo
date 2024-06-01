@@ -58,4 +58,18 @@ public class Nodo {
     public Materia getmateria() {return this.materia;}
     public List<Arista> getAristas() {return this.aristas;}
     public boolean getVisitado() {return this.getVisitado();}
+
+    // Sobrescritura de equals y hashCode
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Nodo nodo = (Nodo) o;
+        return Objects.equals(materia, nodo.materia);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(materia);
+    }
 }

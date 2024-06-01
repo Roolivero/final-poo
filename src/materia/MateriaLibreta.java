@@ -2,7 +2,7 @@ package materia;
 
 public class MateriaLibreta extends Materia{
     //Atributos
-    private int notas;
+    private double notas;
     private String estado;
 
     //Constructor
@@ -17,6 +17,6 @@ public class MateriaLibreta extends Materia{
     public void setNotas(int notas){ this.notas = notas; }
     public void setEstado(String estado){ this.estado = estado;}
 
-    public int getNotas(){ return notas; }
+    public double getNotas(){ return notas; }
     public String getEstado(){ return estado; }
 }

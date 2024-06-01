@@ -1,31 +1,43 @@
 package libretaUniversitaria;
 
+
+import grafoMaterias.Nodo;
 import materia.Materia;
 import materia.MateriaLibreta;
-import planDeEstudio.PlanEstudio;
-
-import java.util;
+import java.util.ArrayList;
 
 public class Libreta {
 
     // Atributos
-    private ArrayList libreta;
+    private ArrayList<MateriaLibreta> libreta;
 
     //Constructor
-    public Libreta ()
-        this.libreta = new ArrayList<>;
+    public Libreta (){
+        this.libreta = new ArrayList<>();
+    }
 
     //Metodo
-    public List completarLibreta(Materia materia){
+    public void completarLibreta(MateriaLibreta materia){
         this.libreta.add(materia);
     }
-    public void mostrarLibreta(Libreta libreta){
-        for (double nota : libreta){
-            System.out.println(nota);
+
+    public boolean buscarMateria(Materia materia){
+        for(MateriaLibreta materiaLibreta : this.getLibreta()){
+            if(materia.getNombre() == materiaLibreta.getNombre()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void mostrarLibreta(){
+        for( MateriaLibreta materia : this.getLibreta()) {
+            System.out.println(materia.mostrarMateria());
         }
     }
 
     //get
-    public List getLibreta() {return libreta;}
+    public ArrayList<MateriaLibreta> getLibreta() {return libreta;}
+
 }
 

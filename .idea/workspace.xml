@@ -5,16 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="923fcf59-8a35-49e9-8ecb-25cb7b737fc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Reso_CS_049-17_Modifica_Plan_de_Estudio_de_la_carrera_Lic._en_Sistemas_-_IDEI.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/TrabajoPracticoIntegrador2021.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/alumno/Alumno.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/alumno/Alumno.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cargaDeDatos/Datos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cargaDeDatos/Datos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/carrera/Carrea.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/grafoMaterias/Grafo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/grafoMaterias/Grafo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/grafoMaterias/Nodo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/grafoMaterias/Nodo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/libretaUniversitaria/Libreta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/libretaUniversitaria/Libreta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/materia/MateriaLibreta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/materia/MateriaLibreta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/planEstudio/PlanEstudio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/planDeEstudio/PlanEstudio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/planDeEstudio/PlanEstudio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/planDeEstudio/PlanEstudio.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

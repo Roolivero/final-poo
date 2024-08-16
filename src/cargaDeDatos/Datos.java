@@ -45,6 +45,7 @@ public class Datos {
 
         Alumno alumno1 = new Alumno("Rocio", "Jofre Olivero", "41789823", LocalDate.of(1999, 12, 22),new Libreta());
         System.out.println(alumno1);
+        alumno1.terminoCarrera(alumno1,planA);
 
         planA.inscribirAlumnoMateria(alumno1,materia3);
 

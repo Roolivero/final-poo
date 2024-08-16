@@ -30,13 +30,21 @@ public class Grafo {
         this.nodoMateria.remove(materia);
     }
 
-    private Nodo obtenernodo(Materia materia){
+    public Nodo obtenernodo(Materia materia){
         for (Nodo n : this.getNodoMateria()){
             if(n.getmateria() == materia){
                 return n;
             }
         }
         return null;
+    }
+
+    public List<Materia> listaMaterias(){
+        List<Materia> materias = new ArrayList<>();
+        for (Nodo nodo : this.getNodoMateria()){
+            materias.add(nodo.getmateria());
+        }
+        return materias;
     }
 
     public List<Nodo> materiasPorCuatrimestre(int cuatrimestre, int numero){

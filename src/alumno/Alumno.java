@@ -3,6 +3,7 @@ package alumno;
 import libretaUniversitaria.Libreta;
 import materia.Materia;
 import materia.MateriaLibreta;
+import planDeEstudio.PlanEstudio;
 
 import java.time.LocalDate;
 
@@ -25,6 +26,16 @@ public class Alumno {
 
     public void agregarNota(MateriaLibreta materia){
         this.getLibretaAlumno().completarLibreta(materia);
+    }
+
+    public void terminoCarrera(Alumno alumno, PlanEstudio plan){
+        if (this.getLibretaAlumno().libretaCompleta(plan)){
+            System.out.println("El alumno " + this.getNombre() + " " + this.getApellido() + " termino la carrera");
+        } else {
+            System.out.println("El alumno " + this.getNombre() + " " + this.getApellido() + " no termino la carrera");
+        }
+
+
     }
 
     //Setters y getters

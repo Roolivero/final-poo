@@ -29,7 +29,7 @@ public class PlanEstudio {
     }
 
     public void inscribirAlumnoMateria(Alumno alumno, Materia materia) {
-        List<Nodo> corrlativasDirectas = this.getGrafo().correlativasDirectas(materia);
+        List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
         if (this.getTipoPlan() == 'A') {
             boolean inscripcion = false;
             inscripcion = correlativasRegular(alumno, materia);
@@ -86,11 +86,11 @@ public class PlanEstudio {
 
 
     private boolean correlativasRegular (Alumno alumno, Materia materia){
-        List<Nodo> corrlativasDirectas = this.getGrafo().correlativasDirectas(materia);
-        if( corrlativasDirectas == null) {
+        List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
+        if( correlativasDirectas == null) {
             return true;
         } else {
-            for (Nodo correlativa : corrlativasDirectas) {
+            for (Nodo correlativa : correlativasDirectas) {
                 for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
                     if (correlativa.getmateria().getNombre().equals(materiaLibreta.getNombre()) && ("Regular".equals(materiaLibreta.getEstado()))) {
                         return true;
@@ -102,11 +102,11 @@ public class PlanEstudio {
     }
 
     private boolean correlativasAprobadas (Alumno alumno, Materia materia){
-        List<Nodo> corrlativasDirectas = this.getGrafo().correlativasDirectas(materia);
-        if( corrlativasDirectas == null) {
+        List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
+        if( correlativasDirectas == null) {
             return true;
         } else {
-            for (Nodo correlativa : corrlativasDirectas) {
+            for (Nodo correlativa : correlativasDirectas) {
                 for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
                     if (correlativa.getmateria().getNombre().equals(materiaLibreta.getNombre()) && ("Aprobada".equals(materiaLibreta.getEstado()))) {
                         return true;

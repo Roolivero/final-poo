@@ -23,13 +23,17 @@ public class AgregarUniversidad extends JPanel {
         JLabel label = new JLabel("Ingrese el nombre de la universidad:");
         label.setFont(new Font("Open Sans", Font.BOLD, 18));
         label.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el JLabel horizontalmente
+        label.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         JTextField nombre = new JTextField(20);
+        Dimension preferredSize = new Dimension(200, nombre.getPreferredSize().height); // Adjust width as needed
         nombre.setFont(new Font("Open Sans", Font.PLAIN, 16));
         nombre.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el JTextField horizontalmente
+        nombre.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         JButton submitButton = new JButton("Submit");
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar el JButton horizontalmente
+        submitButton.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         // Agregar componentes al panel central
         centerPanel.add(label);

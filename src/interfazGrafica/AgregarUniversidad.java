@@ -11,8 +11,8 @@ public class AgregarUniversidad extends JPanel {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // Panel con FlowLayout para alinear a la derecha
         topPanel.setBackground(new Color(251, 245, 248));
         JButton backButton = new JButton("Volver");
-        mainFrame.personalizarBoton(backButton, new Color(156, 64, 83), Color.WHITE);
-        backButton.addActionListener(e -> mainFrame.showHomePanel());
+        mainFrame.personalizarBoton(backButton, new Color(156, 64, 83), Color.WHITE,12);
+        backButton.addActionListener(e -> mainFrame.showCard("Main"));
         topPanel.add(backButton);
 
         // Crear el contenido principal del panel

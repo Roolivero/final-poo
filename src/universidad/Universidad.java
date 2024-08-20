@@ -10,7 +10,7 @@ public class Universidad {
     private List<Carrera> listaCarreras;
     private String nombre;
 
-    //Constructor
+    //Constructor 
     public Universidad(String nombre){
         this.setNombre(nombre);
         this.listaCarreras = new ArrayList<>();

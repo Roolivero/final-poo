@@ -1,106 +1,90 @@
 package interfazGrafica;
 
-import javax.smartcardio.Card;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+
 public class MainFrame extends JFrame {
+    private JPanel cardPanel;
     private CardLayout cardLayout;
-    private JPanel mainPanel;
 
     public MainFrame() {
         setTitle("Sistema Universitario");
-        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        setSize(500, 400);
         setLocationRelativeTo(null);
 
         cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        cardPanel = new JPanel(cardLayout);
 
-        AgregarUniversidad agregarUniversidadPanel = new AgregarUniversidad(this);
-        VerUniversidad verUniversidadPanel = new VerUniversidad(this);
+        // Crear y agregar los paneles al cardPanel
+        cardPanel.add(createMainPanel(), "Main");
+        cardPanel.add(new VerUniversidad(this), "VerUniversidad");
+        cardPanel.add(new AgregarUniversidad(this), "AgregarUniversidad");
 
-
-        // Panel principal
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(new Color(251, 245, 248));
-
-        //Agregar el panel al inicio del cardLayout
-        mainPanel.add(panel,"home");
-
-        // Agregar los paneles al CardLayout
-        mainPanel.add(agregarUniversidadPanel, "AgregarUniversidad");
-        mainPanel.add(verUniversidadPanel, "VerUniversidad");
-
-        // JLabel
-        JLabel label = new JLabel("Bienvenido al sistema universitario ");
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        Font customFont = new Font("Open Sans", Font.BOLD, 20);
-        label.setFont(customFont);
-
-        //JButtons
-        JButton agregarUniversidad = new JButton("Agregar Universidad");
-        JButton verUniversidad = new JButton("Ver Universidad");
-
-        personalizarBoton(agregarUniversidad, new Color(156, 64, 83), Color.WHITE);
-        personalizarBoton(verUniversidad, new Color(156, 64, 83), Color.WHITE);
-
-        agregarUniversidad.addActionListener(e -> cardLayout.show(mainPanel, "AgregarUniversidad"));
-        verUniversidad.addActionListener(e -> cardLayout.show(mainPanel, "VerUniversidad"));
-
-        // Panel para los botones
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(agregarUniversidad);
-        buttonPanel.add(verUniversidad);
-
-        // Agregar componentes al panel
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-        panel.add(label, gbc);
-
-        // Agregar espacio entre el label y los botones
-        gbc.insets = new Insets(20, 10, 10, 10);
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.CENTER;
-
-        panel.add(buttonPanel,gbc);
-
-        add(mainPanel);
-
-        setVisible(true);
+        // Agregar el card panel al frame
+        add(cardPanel);
     }
 
-    void personalizarBoton(JButton boton, Color colorFondo, Color colorTexto) {
-        boton.setFont(new Font("Open Sans", Font.BOLD, 18));
+    private JPanel createMainPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(251, 245, 248));
+
+        JLabel bienvenidaLabel = new JLabel("Bienvenidos al sistema universitario");
+        bienvenidaLabel.setFont((new Font("Arial",Font.PLAIN,20)));
+        bienvenidaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(Box.createVerticalGlue());
+        panel.add(Box.createVerticalStrut(40 ));
+
+        // Create a panel for buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(251, 245, 248));
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton verUniversidadButton = new JButton("Ver universidad");
+        personalizarBoton(verUniversidadButton, new Color(156, 64, 83), Color.WHITE,15);
+        verUniversidadButton.addActionListener(e -> cardLayout.show(cardPanel, "VerUniversidad"));
+
+        JButton agregarUniversidadButton = new JButton("Agregar universidad");
+        personalizarBoton(agregarUniversidadButton, new Color(156, 64, 83), Color.WHITE,15);
+        agregarUniversidadButton.addActionListener(e -> cardLayout.show(cardPanel, "AgregarUniversidad"));
+
+        buttonPanel.add(verUniversidadButton);
+        buttonPanel.add(Box.createHorizontalStrut(15));
+        buttonPanel.add(agregarUniversidadButton);
+
+        panel.add(bienvenidaLabel);
+        panel.add(buttonPanel);
+        panel.add(Box.createVerticalGlue());
+
+        return panel;
+    }
+
+    void personalizarBoton(JButton boton, Color colorFondo, Color colorTexto, int size) {
+        boton.setFont(new Font("Open Sans", Font.BOLD, size));
         boton.setForeground(colorTexto);
-        boton.setUI(new CustomButtonUI(colorFondo));
+        boton.setUI(new MainFrame.CustomButtonUI(colorFondo));
 
         boton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                boton.setUI(new CustomButtonUI(colorFondo.darker()));
+                boton.setUI(new MainFrame.CustomButtonUI(colorFondo.darker()));
                 boton.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                boton.setUI(new CustomButtonUI(colorFondo));
+                boton.setUI(new MainFrame.CustomButtonUI(colorFondo));
                 boton.repaint();
             }
         });
     }
 
-    public void showHomePanel() {
-        cardLayout.show(mainPanel,"home");
-    }
 
     private class CustomButtonUI extends BasicButtonUI {
         private Color color;
@@ -129,7 +113,14 @@ public class MainFrame extends JFrame {
         }
     }
 
+    public void showCard(String cardName) {
+        cardLayout.show(cardPanel, cardName);
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainFrame());
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setVisible(true);
+        });
     }
 }

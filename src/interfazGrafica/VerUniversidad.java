@@ -49,7 +49,7 @@ public class VerUniversidad extends JPanel {
         cardPanel.add(createCarrerasPanel(), "Carreras");
         cardPanel.add(createMateriasPanel(), "Materias");
         cardPanel.add(createAlumnosPanel(), "Alumnos");
-        cardPanel.add(createLibretaUniversitariaPanel(), "LibretaUniversitaria");
+        cardPanel.add(createLibretaUniversitariaPanel(), "Libreta");
 
     }
 
@@ -144,7 +144,7 @@ public class VerUniversidad extends JPanel {
             JButton button = new JButton(label);
             mainFrame.personalizarBoton(button, new Color(156, 64, 83), Color.WHITE, 12);
             buttonPanel.add(button);
-            button.addActionListener(e -> carrerasCardLayout.show(carrerasCardPanel, label));
+            button.addActionListener(e -> materiasCardLayout.show(materiasCardPanel, label));
         }
 
         panel.add(buttonPanel, BorderLayout.NORTH);
@@ -201,7 +201,7 @@ public class VerUniversidad extends JPanel {
 
         // Add internal cards for Carreras
         alumnosCardPanel.add(verAlumnosPanel(), "Ver listado");
-        alumnosCardPanel.add(inscribirAlumnosPanel(), "Inscribir");
+        alumnosCardPanel.add(inscribirAlumnosPanel(), "Inscribir carrera");
         alumnosCardPanel.add(inscribirAlumnosMateriaPanel(), "Inscribir materia");
 
         return panel;
@@ -253,7 +253,7 @@ public class VerUniversidad extends JPanel {
         panel.add(libretaCardPanel, BorderLayout.CENTER); // Main content area for the cards
 
         // Add internal cards for Carreras
-        libretaCardPanel.add(verListadoPanel(), "Ver listado");
+        libretaCardPanel.add(verListadoPanel(), "Ver libreta");
         libretaCardPanel.add(agregarMateriaLibretaPanel(), "Agregar materia");
 
         return panel;

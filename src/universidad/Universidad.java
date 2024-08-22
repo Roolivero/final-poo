@@ -16,7 +16,15 @@ public class Universidad {
         this.listaCarreras = new ArrayList<>();
     }
 
+    public List<Carrera> agregarCarreras(Carrera carrera){
+        this.getListaCarreras().add(carrera);
+        return listaCarreras;
+    }
+
     //Setters y getters
     public void setNombre(String nombre){this.nombre = nombre;}
     public String getNombre(){return this.nombre; }
+    public List<Carrera> getListaCarreras() {
+        return this.listaCarreras;
+    }
 }

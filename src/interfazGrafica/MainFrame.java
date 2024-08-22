@@ -22,8 +22,9 @@ public class MainFrame extends JFrame {
 
         // Crear y agregar los paneles al cardPanel
         cardPanel.add(createMainPanel(), "Main");
-        cardPanel.add(new VerUniversidad(this), "VerUniversidad");
+        cardPanel.add(new BuscarUniversidad(this), "BuscarUniversidad");
         cardPanel.add(new AgregarUniversidad(this), "AgregarUniversidad");
+        cardPanel.add(new VerUniversidad(this), "VerUniversidad");
 
         // Agregar el card panel al frame
         add(cardPanel);
@@ -46,15 +47,15 @@ public class MainFrame extends JFrame {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton verUniversidadButton = new JButton("Ver universidad");
-        personalizarBoton(verUniversidadButton, new Color(156, 64, 83), Color.WHITE,15);
-        verUniversidadButton.addActionListener(e -> cardLayout.show(cardPanel, "VerUniversidad"));
+        JButton buscarUniversidadButton = new JButton("Buscar universidad");
+        personalizarBoton(buscarUniversidadButton, new Color(156, 64, 83), Color.WHITE,15);
+        buscarUniversidadButton.addActionListener(e -> cardLayout.show(cardPanel, "BuscarUniversidad"));
 
         JButton agregarUniversidadButton = new JButton("Agregar universidad");
         personalizarBoton(agregarUniversidadButton, new Color(156, 64, 83), Color.WHITE,15);
         agregarUniversidadButton.addActionListener(e -> cardLayout.show(cardPanel, "AgregarUniversidad"));
 
-        buttonPanel.add(verUniversidadButton);
+        buttonPanel.add(buscarUniversidadButton);
         buttonPanel.add(Box.createHorizontalStrut(15));
         buttonPanel.add(agregarUniversidadButton);
 
@@ -115,6 +116,8 @@ public class MainFrame extends JFrame {
 
     public void showCard(String cardName) {
         cardLayout.show(cardPanel, cardName);
+        revalidate();
+        repaint();
     }
 
     public static void main(String[] args) {

@@ -5,6 +5,7 @@ import carrera.Carrera;
 import libretaUniversitaria.Libreta;
 import materia.Materia;
 import planDeEstudio.PlanEstudio;
+import sistemaUniversitario.SistemaUniversitario;
 import universidad.Universidad;
 
 import java.time.LocalDate;
@@ -17,10 +18,16 @@ public class Datos {
     //Metodo
 
     public void cargarDatos() {
-        Universidad universidad1 = new Universidad("Universidad Nacional Tierra del Fuego");
+        SistemaUniversitario sistema1 = new SistemaUniversitario();
+
+        Universidad universidad1 = new Universidad("UNTDF");
+
+        sistema1.agregarUniversidad(universidad1);
 
         PlanEstudio planA = new PlanEstudio('A');
         Carrera carrera1 = new Carrera("Lic. en sistemas", 5, planA);
+
+        universidad1.agregarCarreras(carrera1);
 
         Materia materia1 = new Materia("Algebra", true, 1);
         Materia materia2 = new Materia("Elementos de Informática", true, 1);

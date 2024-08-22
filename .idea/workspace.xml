@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="923fcf59-8a35-49e9-8ecb-25cb7b737fc9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/interfazGrafica/BuscarUniversidad.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sistemaUniversitario/SistemaUniversitario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfazGrafica/VerUniversidad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfazGrafica/VerUniversidad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cargaDeDatos/Datos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cargaDeDatos/Datos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interfazGrafica/AgregarUniversidad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfazGrafica/AgregarUniversidad.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interfazGrafica/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfazGrafica/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/universidad/Universidad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/universidad/Universidad.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,20 +39,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MainFrame.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MainFrame1.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ro/Desktop/Facultad./2do/2do Cuatri/Poo/Final/final-poo&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.MainFrame.executor": "Run",
+    "Application.MainFrame1.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/ro/Desktop/Facultad./2do/2do Cuatri/Poo/Final/final-poo",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Main" />
@@ -78,5 +83,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/TrabajoPracticoIntegrador2021_pdf$MainFrame.ic" NAME="MainFrame Coverage Results" MODIFIED="1724333932032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>interfazGrafica.*</FILTER>
+    </SUITE>
   </component>
 </project>

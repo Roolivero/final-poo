@@ -8,15 +8,22 @@ import java.util.List;
 public class SistemaUniversitario {
     //Atributos
     private List<Universidad> listaUniversidades;
+    private static SistemaUniversitario instancia;
 
     //Constructor
     public SistemaUniversitario(){
         this.listaUniversidades = new ArrayList<>();
     }
 
-    public List<Universidad> agregarUniversidad(Universidad universidad){
+    public void agregarUniversidad(Universidad universidad) {
         this.getListaUniversidades().add(universidad);
-        return listaUniversidades;
+    }
+
+    public static SistemaUniversitario getInstancia() {
+        if (instancia == null) {
+            instancia = new SistemaUniversitario();
+        }
+        return instancia;
     }
 
     //getter

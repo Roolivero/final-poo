@@ -14,20 +14,20 @@ public class Datos {
     //Constructor
     public Datos() {}
 
-
-    //Metodo
-
     public void cargarDatos() {
-        SistemaUniversitario sistema1 = new SistemaUniversitario();
+        SistemaUniversitario sistema1 = SistemaUniversitario.getInstancia();
 
-        Universidad universidad1 = new Universidad("UNTDF");
+        Universidad universidad1 = new Universidad("U");
 
         sistema1.agregarUniversidad(universidad1);
 
         PlanEstudio planA = new PlanEstudio('A');
+        PlanEstudio planB = new PlanEstudio('B');
         Carrera carrera1 = new Carrera("Lic. en sistemas", 5, planA);
+        Carrera carera2 = new Carrera("Geologia",5,planB);
 
         universidad1.agregarCarreras(carrera1);
+        universidad1.agregarCarreras(carera2);
 
         Materia materia1 = new Materia("Algebra", true, 1);
         Materia materia2 = new Materia("Elementos de Informática", true, 1);
@@ -40,6 +40,17 @@ public class Datos {
         Materia materia9 = new Materia("Sistemas y Organizaciones", true, 3);
         Materia materia10 = new Materia("Arquitectura de Computadoras", true, 3);
 
+        carrera1.agregarMaterias(materia1);
+        carrera1.agregarMaterias(materia2);
+        carrera1.agregarMaterias(materia3);
+        carrera1.agregarMaterias(materia4);
+        carrera1.agregarMaterias(materia5);
+        carrera1.agregarMaterias(materia6);
+        carrera1.agregarMaterias(materia7);
+        carrera1.agregarMaterias(materia8);
+        carrera1.agregarMaterias(materia9);
+        carrera1.agregarMaterias(materia10);
+
         planA.grafoMaterias(materia1,materia8);
         planA.grafoMaterias(materia5,materia8);
         planA.grafoMaterias(materia2,materia10);
@@ -50,7 +61,22 @@ public class Datos {
         planA.grafoMaterias(materia3,materia7);
         planA.grafoMaterias(materia9,null);
 
+
+        Materia materia1Geologia = new Materia("introduccion a la geologia",true,1);
+
+        carera2.agregarMaterias(materia1Geologia);
+
+
         Alumno alumno1 = new Alumno("Rocio", "Jofre Olivero", "41789823", LocalDate.of(1999, 12, 22),new Libreta());
+        Alumno alumno2 = new Alumno("Giuliano ignacio", "Poeta", "41789518", LocalDate.of(1999, 9, 14),new Libreta());
+        Alumno alumno3 = new Alumno("Ignacio", "Sanchez", "51893674", LocalDate.of(2002, 8, 3),new Libreta());
+
+
+        carrera1.inscribirAlumno(alumno1);
+        carrera1.inscribirAlumno(alumno2);
+        carrera1.inscribirAlumno(alumno3);
+
+
         System.out.println(alumno1);
         alumno1.terminoCarrera(alumno1,planA);
 

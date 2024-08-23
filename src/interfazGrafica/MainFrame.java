@@ -1,5 +1,10 @@
 package interfazGrafica;
 
+import cargaDeDatos.Datos;
+import sistemaUniversitario.SistemaUniversitario;
+import universidad.Universidad;
+
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
@@ -10,12 +15,17 @@ import java.awt.event.MouseEvent;
 public class MainFrame extends JFrame {
     private JPanel cardPanel;
     private CardLayout cardLayout;
+    private VerUniversidad verUniversidad;
 
     public MainFrame() {
         setTitle("Sistema Universitario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
         setLocationRelativeTo(null);
+
+        //Para visualizar los datos ya cargados en el sistema
+        Datos datos = new Datos();
+        datos.cargarDatos();
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -24,7 +34,9 @@ public class MainFrame extends JFrame {
         cardPanel.add(createMainPanel(), "Main");
         cardPanel.add(new BuscarUniversidad(this), "BuscarUniversidad");
         cardPanel.add(new AgregarUniversidad(this), "AgregarUniversidad");
-        cardPanel.add(new VerUniversidad(this), "VerUniversidad");
+
+        verUniversidad = new VerUniversidad(this);
+        cardPanel.add(verUniversidad, "VerUniversidad");
 
         // Agregar el card panel al frame
         add(cardPanel);
@@ -112,6 +124,12 @@ public class MainFrame extends JFrame {
             g2.dispose();
             super.paint(g, c);
         }
+    }
+
+    public void showVerUniversidad(Universidad universidad) {
+        verUniversidad.setUniversidad(universidad);
+        CardLayout cl = (CardLayout) (cardPanel.getLayout());
+        cl.show(cardPanel, "VerUniversidad");
     }
 
     public void showCard(String cardName) {

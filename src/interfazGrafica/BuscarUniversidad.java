@@ -14,9 +14,11 @@ public class BuscarUniversidad extends JPanel {
     private JTextField universityNameField;
     private JPanel mainPanel;
     private boolean initialized = false;
+    //private SistemaUniversitario sistema;
 
     public BuscarUniversidad(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        //this.sistema = sistema;
         setLayout(new BorderLayout());
 
         // Add ComponentListener
@@ -89,7 +91,7 @@ public class BuscarUniversidad extends JPanel {
 
         agregarButton.addActionListener(e -> {
             String universityName = universityNameField.getText();
-            verificarUniversidad(universityName, agregarButton, panel);
+            verificarUniversidad(universityName, panel);
         });
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -107,15 +109,14 @@ public class BuscarUniversidad extends JPanel {
         return panel;
     }
 
-    private void verificarUniversidad(String nombreUniversidad, JButton boton, JPanel panel){
-        SistemaUniversitario sistema = new SistemaUniversitario();
+    private void verificarUniversidad(String nombreUniversidad, JPanel panel){
+        SistemaUniversitario sistema = SistemaUniversitario.getInstancia();
         List<Universidad> listaUniversidades = sistema.getListaUniversidades();
-
-        boolean universidadEncontrada = false;
+        Universidad universidadEncontrada = null;
 
         for (Universidad uni : listaUniversidades) {
             if (uni.getNombre().equals(nombreUniversidad)) {
-                universidadEncontrada = true;
+                universidadEncontrada = uni;
                 break;
             }
         }
@@ -125,8 +126,8 @@ public class BuscarUniversidad extends JPanel {
             }
         }
 
-        if (universidadEncontrada) {
-            boton.addActionListener(e -> mainFrame.showCard("VerUniversidad"));
+        if (universidadEncontrada != null ) {
+            mainFrame.showVerUniversidad(universidadEncontrada);
         } else {
             JLabel errorLabel = new JLabel("Universidad no encontrada.");
             errorLabel.setForeground(Color.RED);

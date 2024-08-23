@@ -19,6 +19,7 @@ public class PlanEstudio {
         this.setTipoPlan(tipoPlan);
     }
 
+
     //Metodos
     public void grafoMaterias(Materia materia, Materia correlativa){
         Nodo nodoMateria = correlativas.agregarMateria(materia);

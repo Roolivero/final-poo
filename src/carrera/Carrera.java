@@ -1,6 +1,7 @@
 package carrera;
 
 import alumno.Alumno;
+import materia.Materia;
 import planDeEstudio.PlanEstudio;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class Carrera {
     private int duracion;
     private PlanEstudio planEstudio;
     private List <Alumno> alumnosInscriptos;
+    private List <Materia> materias;
 
     //Constructor
     public Carrera (String nombre, int duracion, PlanEstudio planEstudio){
@@ -19,11 +21,16 @@ public class Carrera {
         this.setDuracion(duracion);
         this.setPlanEstudio(planEstudio);
         this.alumnosInscriptos = new ArrayList<>();
+        this.materias = new ArrayList<>();
     }
 
     //Metodos
     public void inscribirAlumno(Alumno alumno){
         this.getAlumnosInscriptos().add(alumno);
+    }
+
+    public void agregarMaterias(Materia materia){
+       this.getMaterias().add(materia);
     }
 
     //Setters y getters
@@ -36,5 +43,6 @@ public class Carrera {
     public int getDuracion(){return this.duracion;}
     public List<Alumno> getAlumnosInscriptos() {return this.alumnosInscriptos;}
     public PlanEstudio getPlanEstudio(){ return this.planEstudio;}
+    public List<Materia> getMaterias() {return this.materias;}
 
 }

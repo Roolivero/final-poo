@@ -2,7 +2,9 @@ package interfazGrafica;
 
 import alumno.Alumno;
 import carrera.Carrera;
+import libretaUniversitaria.Libreta;
 import materia.Materia;
+import materia.MateriaLibreta;
 import universidad.Universidad;
 
 import javax.swing.*;
@@ -41,22 +43,24 @@ public class VerUniversidad extends JPanel {
 
     private void updateDisplay() {
         // Panel para las carreras
-        JPanel carrerasPanel = verCarrerasPanel();
         carrerasCardPanel.removeAll();
-        carrerasCardPanel.add(carrerasPanel, "Ver listado");
-        carrerasCardPanel.add(agregarCarrerasPanel(), "Agregar");
+        carrerasCardPanel.add(createPanelVacio(), "Vacio");
+        carrerasCardLayout.show(carrerasCardPanel, "Vacio");
 
-        //Panel para las materias
-        JPanel materiasPanel = verMateriasPanel();
+        // Panel para las materias
         materiasCardPanel.removeAll();
-        materiasCardPanel.add(materiasPanel, "Ver listado");
-        materiasCardPanel.add(agregarMateriasPanel(), "Agregar");
+        materiasCardPanel.add(createPanelVacio(), "Vacio");
+        materiasCardLayout.show(materiasCardPanel, "Vacio");
 
-        //Panel para los alumnos
-        JPanel alumnosPanel = verAlumnosPanel();
+        // Panel para los alumnos
         alumnosCardPanel.removeAll();
-        alumnosCardPanel.add(alumnosPanel, "Ver listado");
-        alumnosCardPanel.add(agregarMateriasPanel(), "Agregar");
+        alumnosCardPanel.add(createPanelVacio(), "Vacio");
+        alumnosCardLayout.show(alumnosCardPanel, "Vacio");
+
+        // Panel para la libreta universitaria
+        libretaCardPanel.removeAll();
+        libretaCardPanel.add(createPanelVacio(), "Vacio");
+        libretaCardLayout.show(libretaCardPanel, "Vacio");
 
         carrerasCardPanel.revalidate();
         carrerasCardPanel.repaint();
@@ -64,6 +68,8 @@ public class VerUniversidad extends JPanel {
         materiasCardPanel.repaint();
         alumnosCardPanel.revalidate();
         alumnosCardPanel.repaint();
+        libretaCardPanel.revalidate();
+        libretaCardPanel.repaint();
     }
 
     public VerUniversidad(MainFrame mainFrame) {
@@ -125,34 +131,49 @@ public class VerUniversidad extends JPanel {
         return panel;
     }
 
-    // Placeholder methods for different card panels
     private JPanel createCarrerasPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(221, 189, 195));
         panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, new Color(156, 64, 83)));
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // 20 is the horizontal gap, 10 is the vertical gap
-        buttonPanel.setBackground(new Color(251, 245, 248)); // Match background color
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setBackground(new Color(251, 245, 248));
+
+        carrerasCardLayout = new CardLayout();
+        carrerasCardPanel = new JPanel(carrerasCardLayout);
+        carrerasCardPanel.setBackground(new Color(251, 245, 248));
+        panel.add(carrerasCardPanel, BorderLayout.CENTER);
+        
+        carrerasCardPanel.add(createPanelVacio(),"Vacio");
+        carrerasCardLayout.show(carrerasCardPanel, "Vacio");
 
         String[] carrerasLabels = {"Ver listado", "Agregar"};
         for (String label : carrerasLabels) {
             JButton button = new JButton(label);
             mainFrame.personalizarBoton(button, new Color(156, 64, 83), Color.WHITE, 12);
             buttonPanel.add(button);
-            button.addActionListener(e -> carrerasCardLayout.show(carrerasCardPanel, label));
+            button.addActionListener(e -> {
+                if (label.equals("Ver listado")) {
+                    carrerasCardPanel.removeAll();
+                    carrerasCardPanel.add(verCarrerasPanel(), label);
+                } else {
+                    carrerasCardPanel.removeAll();
+                    carrerasCardPanel.add(agregarCarrerasPanel(), label);
+                }
+                carrerasCardLayout.show(carrerasCardPanel, label);
+                carrerasCardPanel.revalidate();
+                carrerasCardPanel.repaint();
+            });
         }
 
-        panel.add(buttonPanel, BorderLayout.NORTH); // Add buttons at the top of the panel
+        panel.add(buttonPanel, BorderLayout.NORTH);
 
-        // Initialize the CardLayout and JPanel for Carreras
-        carrerasCardLayout = new CardLayout();
-        carrerasCardPanel = new JPanel(carrerasCardLayout);
-        panel.add(carrerasCardPanel, BorderLayout.CENTER); // Main content area for the cards
+        return panel;
+    }
 
-        // Add internal cards for Carreras
-        carrerasCardPanel.add(verCarrerasPanel(), "Ver listado");
-        carrerasCardPanel.add(agregarCarrerasPanel(), "Agregar");
-
+    private JPanel createPanelVacio() {
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(251, 245, 248));
         return panel;
     }
 
@@ -178,13 +199,13 @@ public class VerUniversidad extends JPanel {
         if(universidad != null && universidad.getListaCarreras() != null){
             for(Carrera carrera : universidad.getListaCarreras()){
                 JLabel carreraLabel = new JLabel("* "+carrera.getNombre());
-                carreraLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Alinear en el centro
+                carreraLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 panel.add(carreraLabel);
-                panel.add(Box.createVerticalStrut(10)); // Espacio entre las carreras
+                panel.add(Box.createVerticalStrut(10));
             }
         } else {
             JLabel noCarrerasLabel = new JLabel("No hay carreras disponibles.");
-            noCarrerasLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Alinear en el centro
+            noCarrerasLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             panel.add(noCarrerasLabel);
         }
 
@@ -200,25 +221,35 @@ public class VerUniversidad extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setBackground(new Color(251, 245, 248));
 
+        materiasCardLayout = new CardLayout();
+        materiasCardPanel = new JPanel(materiasCardLayout);
+        materiasCardPanel.setBackground(new Color(251, 245, 248));
+        panel.add(materiasCardPanel,BorderLayout.CENTER);
+
+        materiasCardPanel.add(createPanelVacio(),"Vacio");
+        materiasCardLayout.show(materiasCardPanel,"Vacio");
+
         String[] materiasLabels = {"Ver listado", "Agregar"};
         for (String label : materiasLabels) {
             JButton button = new JButton(label);
             mainFrame.personalizarBoton(button, new Color(156, 64, 83), Color.WHITE, 12);
             buttonPanel.add(button);
-            button.addActionListener(e -> materiasCardLayout.show(materiasCardPanel, label));
+
+            button.addActionListener(e -> {
+                if (label.equals("Ver listado")) {
+                    materiasCardPanel.removeAll();
+                    materiasCardPanel.add(verMateriasPanel(), label);
+                } else {
+                    materiasCardPanel.removeAll();
+                    materiasCardPanel.add(agregarMateriasPanel(), label);
+                }
+                materiasCardLayout.show(materiasCardPanel, label);
+                materiasCardPanel.revalidate();
+                materiasCardPanel.repaint();
+            });
         }
 
         panel.add(buttonPanel, BorderLayout.NORTH);
-
-        // Initialize the CardLayout and JPanel for Materias
-        materiasCardLayout = new CardLayout();
-        materiasCardPanel = new JPanel(materiasCardLayout);
-        panel.add(materiasCardPanel, BorderLayout.CENTER); // Main content area for the cards
-
-        // Add internal cards for Carreras
-        materiasCardPanel.add(verMateriasPanel(), "Ver listado");
-        materiasCardPanel.add(agregarMateriasPanel(), "Agregar");
-
 
         return panel;
     }
@@ -244,18 +275,20 @@ public class VerUniversidad extends JPanel {
         JPanel dropPanel = new JPanel();
         if (universidad != null && universidad.getListaCarreras() != null) {
             String[] nombres = getNombresCarreras(universidad.getListaCarreras());
+
             JComboBox<String> dropBox = new JComboBox<>(nombres);
-            dropPanel.add(dropBox);
+            dropBox.setSelectedIndex(-1);
 
             JPanel materiasPanel = new JPanel();
             materiasPanel.setLayout(new BoxLayout(materiasPanel, BoxLayout.Y_AXIS));
             panel.add(materiasPanel);
 
-
             dropBox.addActionListener(e -> {
                 String carrera = (String) dropBox.getSelectedItem();
                 Carrera carreraSeleccionada = getCarreraByName(carrera);
-                displaySubjectsForCareer(materiasPanel, carreraSeleccionada);
+                if(carreraSeleccionada != null){
+                    displaySubjectsForCareer(materiasPanel, carreraSeleccionada);
+                }
             });
         } else {
             dropPanel.add(new JLabel("No hay carreras disponibles"));
@@ -315,25 +348,38 @@ public class VerUniversidad extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // 20 is the horizontal gap, 10 is the vertical gap
         buttonPanel.setBackground(new Color(251, 245, 248)); // Match background color
 
+        alumnosCardLayout = new CardLayout();
+        alumnosCardPanel = new JPanel(alumnosCardLayout);
+        alumnosCardPanel.setBackground(new Color(251, 245, 248));
+        panel.add(alumnosCardPanel, BorderLayout.CENTER);
+
+        alumnosCardPanel.add(createPanelVacio(),"Vacio");
+        alumnosCardLayout.show(alumnosCardPanel, "Vacio");
+
+
         String[] alumnosLabels = {"Ver listado", "Inscribir carrera","Inscribir materia"};
         for (String label : alumnosLabels) {
             JButton button = new JButton(label);
             mainFrame.personalizarBoton(button, new Color(156, 64, 83), Color.WHITE, 12);
             buttonPanel.add(button);
-            button.addActionListener(e -> alumnosCardLayout.show(alumnosCardPanel, label));
+            button.addActionListener(e -> {
+                if (label.equals("Ver listado")) {
+                    alumnosCardPanel.removeAll();
+                    alumnosCardPanel.add(verAlumnosPanel(), label);
+                } else if (label.equals("Inscribir carrera")){
+                    alumnosCardPanel.removeAll();
+                    alumnosCardPanel.add(inscribirAlumnosPanel(), label);
+                } else if (label.equals("Inscribir materia")){
+                    alumnosCardPanel.removeAll();
+                    alumnosCardPanel.add(inscribirAlumnosMateriaPanel(), label);
+                }
+                alumnosCardLayout.show(alumnosCardPanel, label);
+                alumnosCardPanel.revalidate();
+                alumnosCardPanel.repaint();
+            });
         }
 
         panel.add(buttonPanel, BorderLayout.NORTH); // Add buttons at the top of the panel
-
-        // Initialize the CardLayout and JPanel for Carreras
-        alumnosCardLayout = new CardLayout();
-        alumnosCardPanel = new JPanel(alumnosCardLayout);
-        panel.add(alumnosCardPanel, BorderLayout.CENTER); // Main content area for the cards
-
-        // Add internal cards for Carreras
-        alumnosCardPanel.add(verAlumnosPanel(), "Ver listado");
-        alumnosCardPanel.add(inscribirAlumnosPanel(), "Inscribir carrera");
-        alumnosCardPanel.add(inscribirAlumnosMateriaPanel(), "Inscribir materia");
 
         return panel;
     }
@@ -415,29 +461,39 @@ public class VerUniversidad extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setBackground(new Color(251, 245, 248));
 
+        libretaCardLayout = new CardLayout();
+        libretaCardPanel = new JPanel(libretaCardLayout);
+        libretaCardPanel.setBackground(new Color(251, 245, 248));
+        panel.add(libretaCardPanel, BorderLayout.CENTER);
+
+        libretaCardPanel.add(createPanelVacio(),"Vacio");
+        libretaCardLayout.show(libretaCardPanel, "Vacio");
+
+
         String[] carrerasLabels = {"Ver libreta", "Agregar materia"};
         for (String label : carrerasLabels) {
             JButton button = new JButton(label);
             mainFrame.personalizarBoton(button, new Color(156, 64, 83), Color.WHITE, 12);
             buttonPanel.add(button);
-            button.addActionListener(e -> libretaCardLayout.show(libretaCardPanel, label));
+            button.addActionListener(e -> {
+                if (label.equals("Ver libreta")) {
+                    libretaCardPanel.removeAll();
+                    libretaCardPanel.add(verLibretaPanel(), label);
+                } else if (label.equals("Agregar materia")){
+                    libretaCardPanel.removeAll();
+                    libretaCardPanel.add(agregarMateriaLibretaPanel(), label);
+                }
+                libretaCardLayout.show(libretaCardPanel, label);
+                libretaCardPanel.revalidate();
+                libretaCardPanel.repaint();
+            });
         }
 
         panel.add(buttonPanel, BorderLayout.NORTH);
 
-        // Initialize the CardLayout and JPanel for Libreta
-        libretaCardLayout = new CardLayout();
-        libretaCardPanel = new JPanel(libretaCardLayout);
-        panel.add(libretaCardPanel, BorderLayout.CENTER); // Main content area for the cards
-
-        // Add internal cards for Carreras
-        libretaCardPanel.add(verLibretaPanel(), "Ver libreta");
-        libretaCardPanel.add(agregarMateriaLibretaPanel(), "Agregar materia");
-
         return panel;
     }
 
-    //REVISAR!!!
 
     private JPanel verLibretaPanel(){
         JPanel panel = new JPanel();
@@ -451,20 +507,37 @@ public class VerUniversidad extends JPanel {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel dropPanel = new JPanel();
+        dropPanel.setLayout(new FlowLayout());
+
+
         if (universidad != null && universidad.getListaCarreras() != null) {
-            String[] nombres = getNombresCarreras(universidad.getListaCarreras());
-            JComboBox<String> dropBox = new JComboBox<>(nombres);
-            dropPanel.add(dropBox);
+            String[] nombresCarreras = getNombresCarreras(universidad.getListaCarreras());
+            JComboBox<String> carrerasDropBox = new JComboBox<>(nombresCarreras);
+            JComboBox<String> alumnosDropBox = new JComboBox<>();
 
-            JPanel alumnosPanel = new JPanel();
-            alumnosPanel.setLayout(new BoxLayout(alumnosPanel, BoxLayout.Y_AXIS));
-            panel.add(alumnosPanel);
+            dropPanel.add(new JLabel("Carrera: "));
+            dropPanel.add(carrerasDropBox);
+            dropPanel.add(new JLabel("Alumno: "));
+            dropPanel.add(alumnosDropBox);
 
-            dropBox.addActionListener(e -> {
-                String carrera = (String) dropBox.getSelectedItem();
-                Carrera carreraSeleccionada = getCarreraByName(carrera);
-                displaySubjectsForLibreta(alumnosPanel, carreraSeleccionada);
+            JPanel libretaPanel = new JPanel();
+            libretaPanel.setLayout(new BoxLayout(libretaPanel, BoxLayout.Y_AXIS));
+            panel.add(libretaPanel);
+
+            carrerasDropBox.addActionListener(e -> {
+                String carreraNombre = (String) carrerasDropBox.getSelectedItem();
+                Carrera carreraSeleccionada = getCarreraByName(carreraNombre);
+                displaySubjectsForAlumnos(alumnosDropBox, carreraSeleccionada);
             });
+
+            alumnosDropBox.addActionListener(e -> {
+                String carreraNombre = (String) carrerasDropBox.getSelectedItem();
+                String alumnoNombre = (String) alumnosDropBox.getSelectedItem();
+                Carrera carrera = getCarreraByName(carreraNombre);
+                Alumno alumno = getAlumnoByName(carrera, alumnoNombre);
+                displayLibreta(libretaPanel, alumno);
+            });
+
         } else {
             dropPanel.add(new JLabel("No hay carreras disponibles"));
         }
@@ -473,13 +546,59 @@ public class VerUniversidad extends JPanel {
         return panel;
     }
 
-    private void displaySubjectsForLibreta (JPanel alumnosPanel, Carrera carrera) {
-        alumnosPanel.removeAll();
+    private void displaySubjectsForAlumnos (JComboBox<String> alumnosDropBox, Carrera carrera) {
+        alumnosDropBox.removeAllItems();
 
-        // completar
+        if (carrera != null && carrera.getPlanEstudio() != null) {
+            List<Alumno> alumnos = carrera.getAlumnosInscriptos();
+            for (Alumno alumno : alumnos) {
+                alumnosDropBox.addItem(alumno.getNombre());
+            }
+        }
+    }
 
-        alumnosPanel.revalidate();
-        alumnosPanel.repaint();
+    private Alumno getAlumnoByName(Carrera carrera, String nombre) {
+        if (carrera != null && carrera.getAlumnosInscriptos() != null) {
+            for (Alumno alumno : carrera.getAlumnosInscriptos()) {
+                if (alumno.getNombre().equals(nombre)) {
+                    return alumno;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void displayLibreta(JPanel libretaPanel, Alumno alumno) {
+        libretaPanel.removeAll();
+
+        if (alumno != null) {
+            JLabel alumnoLabel = new JLabel("Libreta de " + alumno.getNombre() + " " + alumno.getApellido());
+            alumnoLabel.setFont(new Font("Open Sans", Font.BOLD, 14));
+            libretaPanel.add(alumnoLabel);
+            libretaPanel.add(Box.createVerticalStrut(10));
+
+            Libreta libretaAlumno = alumno.getLibretaAlumno();
+            if (libretaAlumno != null && libretaAlumno.getLibreta() != null) {
+                ArrayList<MateriaLibreta> materias = libretaAlumno.getLibreta();
+                if (!materias.isEmpty()) {
+                    for (MateriaLibreta materia : materias) {
+                        JLabel materiaLabel = new JLabel(materia.getNombre() + ": " + materia.getNotas());
+                        materiaLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                        libretaPanel.add(materiaLabel);
+                        libretaPanel.add(Box.createVerticalStrut(5));
+                    }
+                } else {
+                    libretaPanel.add(new JLabel("No hay materias registradas en la libreta."));
+                }
+            } else {
+                libretaPanel.add(new JLabel("La libreta del alumno está vacía."));
+            }
+        } else {
+            libretaPanel.add(new JLabel("No se encontró información del alumno"));
+        }
+
+        libretaPanel.revalidate();
+        libretaPanel.repaint();
     }
 
     private JPanel agregarMateriaLibretaPanel(){

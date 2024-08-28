@@ -4,6 +4,7 @@ import alumno.Alumno;
 import carrera.Carrera;
 import libretaUniversitaria.Libreta;
 import materia.Materia;
+import materia.MateriaLibreta;
 import planDeEstudio.PlanEstudio;
 import sistemaUniversitario.SistemaUniversitario;
 import universidad.Universidad;
@@ -17,7 +18,7 @@ public class Datos {
     public void cargarDatos() {
         SistemaUniversitario sistema1 = SistemaUniversitario.getInstancia();
 
-        Universidad universidad1 = new Universidad("U");
+        Universidad universidad1 = new Universidad("Universidad Nacional Tierra del Fuego");
 
         sistema1.agregarUniversidad(universidad1);
 
@@ -76,6 +77,16 @@ public class Datos {
         carrera1.inscribirAlumno(alumno2);
         carrera1.inscribirAlumno(alumno3);
 
+
+        MateriaLibreta materiaLibreta1 = new MateriaLibreta("Algebra",true,1,9,"Aprobada");
+        MateriaLibreta materiaLibreta2 = new MateriaLibreta("Analisis matematico",true,1,10,"Aprobada");
+        MateriaLibreta materiaLibreta3 = new MateriaLibreta("Expresión de Problemas y Algoritmos",true,1,8,"Aprobada");
+        MateriaLibreta materiaLibreta4 = new MateriaLibreta("Algorítmica y Programación I",true,1,9,"Aprobada");
+
+        alumno1.agregarMateriaLibreta(materiaLibreta1);
+        alumno1.agregarMateriaLibreta(materiaLibreta2);
+        alumno1.agregarMateriaLibreta(materiaLibreta3);
+        alumno1.agregarMateriaLibreta(materiaLibreta4);
 
         System.out.println(alumno1);
         alumno1.terminoCarrera(alumno1,planA);

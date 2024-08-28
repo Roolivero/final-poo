@@ -24,7 +24,7 @@ public class Alumno {
         this.setLibretaAlumno(libretaAlumno);
     }
 
-    public void agregarNota(MateriaLibreta materia){
+    public void agregarMateriaLibreta(MateriaLibreta materia){
         this.getLibretaAlumno().completarLibreta(materia);
     }
 

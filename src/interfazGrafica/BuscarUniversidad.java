@@ -1,7 +1,9 @@
 package interfazGrafica;
 
+import carrera.Carrera;
 import sistemaUniversitario.SistemaUniversitario;
 import universidad.Universidad;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
@@ -11,27 +13,32 @@ import java.util.List;
 
 public class BuscarUniversidad extends JPanel {
     private MainFrame mainFrame;
-    private JTextField universityNameField;
     private JPanel mainPanel;
     private boolean initialized = false;
-    //private SistemaUniversitario sistema;
+    private SistemaUniversitario sistemaUniversitario;
+    private JComboBox<String> dropBox;
 
     public BuscarUniversidad(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        //this.sistema = sistema;
+
         setLayout(new BorderLayout());
 
         // Add ComponentListener
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
-                if (!initialized) {
+                if (initialized) {
+                    remove(mainPanel); // Remove the old mainPanel
+                    mainPanel = createMainPanel(); // Recreate the mainPanel with a new JComboBox
+                    add(mainPanel, BorderLayout.CENTER); // Add the new mainPanel
+                } else {
                     initComponents();
                     initialized = true;
                 }
                 resetPanel();
             }
         });
+
     }
 
     private void initComponents() {
@@ -39,25 +46,10 @@ public class BuscarUniversidad extends JPanel {
         JPanel topPanel = createTopPanel();
         add(topPanel, BorderLayout.NORTH);
 
-        // Panel para el input, submit y el label principal
         mainPanel = createMainPanel();
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    private void resetPanel() {
-        if (universityNameField != null) {
-            universityNameField.setText("");
-        }
-        if (mainPanel != null) {
-            for (Component comp : mainPanel.getComponents()) {
-                if (comp instanceof JLabel && ((JLabel) comp).getForeground().equals(Color.RED)) {
-                    mainPanel.remove(comp);
-                }
-            }
-            mainPanel.revalidate();
-            mainPanel.repaint();
-        }
-    }
 
     private JPanel createTopPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -65,87 +57,100 @@ public class BuscarUniversidad extends JPanel {
         panel.setBorder(new LineBorder(new Color(156, 64, 83), 2));
         JButton volverButton = new JButton("Volver");
         mainFrame.personalizarBoton(volverButton, new Color(156, 64, 83), Color.WHITE,10);
-        volverButton.addActionListener(e -> mainFrame.showCard("Main"));
+        volverButton.addActionListener(e -> {
+            resetPanel();
+            mainFrame.showCard("Main");
+        });
         panel.add(volverButton);
         return panel;
     }
 
+    private void resetPanel() {
+        if (mainPanel != null) {
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof JLabel && ((JLabel) comp).getForeground().equals(Color.RED)) {
+                    mainPanel.remove(comp);
+                }
+            }
+            // Reset the dropBox selection
+            if (dropBox != null) {
+                dropBox.removeAllItems(); // Clear all items
+                String[] universidades = getUniversidades(sistemaUniversitario.getListaUniversidades());
+                dropBox.setSelectedIndex(-1);
+                for (String universidad : universidades) {
+                    dropBox.addItem(universidad);
+                }
+            }
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
+    }
+
     private JPanel createMainPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Using BoxLayout to stack components vertically
         panel.setBackground(new Color(251, 240, 242));
         panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, new Color(155, 63, 82)));
 
-        JLabel labelPrincipal = new JLabel("Ingrese el nombre de la Universidad que desea buscar");
+        JLabel labelPrincipal = new JLabel("Seleccione una universidad");
         labelPrincipal.setFont(new Font("Arial", Font.BOLD, 20));
+        labelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the label
+        panel.add(labelPrincipal);
 
-        universityNameField = new JTextField(20);
-        universityNameField.setPreferredSize(new Dimension(350, 40));
-        universityNameField.setFont(new Font("Arial", Font.PLAIN, 20));
+        panel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some space between components
 
-        JButton agregarButton = new JButton("Buscar");
-        mainFrame.personalizarBoton(agregarButton, new Color(148, 13, 53), Color.WHITE, 15);
+        //Inicializar sistema universitario
+        sistemaUniversitario = SistemaUniversitario.getInstancia();
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(agregarButton);
+        JPanel dropPanel = new JPanel();
+        dropPanel.setBackground(new Color(251, 240, 242));
+        dropPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        agregarButton.addActionListener(e -> {
-            String universityName = universityNameField.getText();
-            verificarUniversidad(universityName, panel);
-        });
+        if (sistemaUniversitario != null && sistemaUniversitario.getListaUniversidades() != null) {
+            String[] universidades = getUniversidades(sistemaUniversitario.getListaUniversidades());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(1, 20, 1, 20);
-        gbc.anchor = GridBagConstraints.CENTER;
+            JComboBox<String> dropBox = new JComboBox<>(universidades);
+            dropBox.setSelectedIndex(-1);
 
-        panel.add(labelPrincipal, gbc);
-        panel.add(Box.createVerticalStrut(5), gbc);
-        panel.add(universityNameField, gbc);
-        panel.add(Box.createVerticalStrut(5), gbc);
-        panel.add(buttonPanel, gbc);
+            dropBox.addActionListener(e -> {
+                String universidad = (String) dropBox.getSelectedItem();
+                Universidad universidadSeleccionada = getNombreUniversidad(universidad);
+                if (universidadSeleccionada != null) {
+                    mainFrame.showVerUniversidad(universidadSeleccionada);
+                }
+            });
+
+            dropPanel.add(dropBox);
+        } else {
+            dropPanel.add(new JLabel("No hay universidades disponibles"));
+        }
+
+        panel.add(dropPanel);
 
         return panel;
     }
 
-    private void verificarUniversidad(String nombreUniversidad, JPanel panel){
-        SistemaUniversitario sistema = SistemaUniversitario.getInstancia();
-        List<Universidad> listaUniversidades = sistema.getListaUniversidades();
-        Universidad universidadEncontrada = null;
-
-        for (Universidad uni : listaUniversidades) {
-            if (uni.getNombre().equals(nombreUniversidad)) {
-                universidadEncontrada = uni;
-                break;
-            }
-        }
-        for (Component comp : panel.getComponents()) {
-            if (comp instanceof JLabel && ((JLabel) comp).getForeground().equals(Color.RED)) {
-                panel.remove(comp);
-            }
+    private String[] getUniversidades(List<Universidad> lista) {
+        if (lista == null || lista.isEmpty()) {
+            return new String[]{"No hay carreras"};
         }
 
-        if (universidadEncontrada != null ) {
-            mainFrame.showVerUniversidad(universidadEncontrada);
-        } else {
-            JLabel errorLabel = new JLabel("Universidad no encontrada.");
-            errorLabel.setForeground(Color.RED);
-            errorLabel.setFont(new Font("Arial", Font.BOLD, 16));
-
-            // Add the error message to the panel
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridwidth = GridBagConstraints.REMAINDER;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.insets = new Insets(10, 20, 10, 20);
-            gbc.anchor = GridBagConstraints.CENTER;
-            panel.add(errorLabel, gbc);
+        String[] nombresCarreras = new String[lista.size()];
+        for (int i = 0; i < lista.size(); i++) {
+            nombresCarreras[i] = lista.get(i).getNombre();
         }
-
-        panel.revalidate();
-        panel.repaint();
-
+        return nombresCarreras;
     }
 
+    private Universidad getNombreUniversidad(String name) {
+        if (sistemaUniversitario != null) {
+            for (Universidad uni : sistemaUniversitario.getListaUniversidades()) {
+                if (uni.getNombre().equals(name)) {
+                    return uni;
+                }
+            }
+        }
+        return null;
+    }
 
 }

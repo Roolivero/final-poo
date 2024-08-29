@@ -1,6 +1,7 @@
 package interfazGrafica;
 
 import cargaDeDatos.Datos;
+import carrera.Carrera;
 import sistemaUniversitario.SistemaUniversitario;
 import universidad.Universidad;
 
@@ -16,6 +17,7 @@ public class MainFrame extends JFrame {
     private JPanel cardPanel;
     private CardLayout cardLayout;
     private VerUniversidad verUniversidad;
+    private VerCarrera verCarrera;
 
     public MainFrame() {
         setTitle("Sistema Universitario");
@@ -37,6 +39,9 @@ public class MainFrame extends JFrame {
 
         verUniversidad = new VerUniversidad(this);
         cardPanel.add(verUniversidad, "VerUniversidad");
+
+        verCarrera = new VerCarrera(this);
+        cardPanel.add(verCarrera, "VerCarrera");
 
         // Agregar el card panel al frame
         add(cardPanel);
@@ -128,8 +133,16 @@ public class MainFrame extends JFrame {
 
     public void showVerUniversidad(Universidad universidad) {
         verUniversidad.setUniversidad(universidad);
+        System.out.println("universidad: " + universidad.getNombre());
         CardLayout cl = (CardLayout) (cardPanel.getLayout());
         cl.show(cardPanel, "VerUniversidad");
+    }
+
+    public void showVerCarrera(Carrera carrera) {
+        verCarrera.setCarrera(carrera);
+        System.out.println("Carrera: " + carrera.getNombre());
+        CardLayout cl = (CardLayout) (cardPanel.getLayout());
+        cl.show(cardPanel, "VerCarrera");
     }
 
     public void showCard(String cardName) {

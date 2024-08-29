@@ -132,14 +132,14 @@ public class BuscarUniversidad extends JPanel {
 
     private String[] getUniversidades(List<Universidad> lista) {
         if (lista == null || lista.isEmpty()) {
-            return new String[]{"No hay carreras"};
+            return new String[]{"No hay universidades"};
         }
 
-        String[] nombresCarreras = new String[lista.size()];
+        String[] nombreUniversidades = new String[lista.size()];
         for (int i = 0; i < lista.size(); i++) {
-            nombresCarreras[i] = lista.get(i).getNombre();
+            nombreUniversidades[i] = lista.get(i).getNombre();
         }
-        return nombresCarreras;
+        return nombreUniversidades;
     }
 
     private Universidad getNombreUniversidad(String name) {

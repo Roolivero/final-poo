@@ -1,17 +1,22 @@
 package interfazGrafica;
 
-import javax.lang.model.element.VariableElement;
+import sistemaUniversitario.SistemaUniversitario;
+import universidad.Universidad;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class AgregarUniversidad extends JPanel {
-
     private MainFrame mainFrame;
+    private SistemaUniversitario sistemaUniversitario;
 
     public AgregarUniversidad(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         setLayout(new BorderLayout());
+
+        //Inicializar sistema universitario.
+        sistemaUniversitario = SistemaUniversitario.getInstancia();
 
         // Top panel with "Volver" button
         JPanel topPanel = createTopPanel();
@@ -20,7 +25,6 @@ public class AgregarUniversidad extends JPanel {
         //Panel para el inpur, subbit y el label principal
         JPanel mainPanel = createMainPanel();
         add(mainPanel, BorderLayout.CENTER);
-
     }
 
     private JPanel createTopPanel() {
@@ -35,38 +39,65 @@ public class AgregarUniversidad extends JPanel {
     }
 
     private JPanel createMainPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(new Color(251, 240, 242));
         panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, new Color(155, 63, 82)));
 
-        JLabel labelPrincipal = new JLabel("Ingrese el nombre de la Universidad que desea registrar");
+        // Añadir glue antes del primer componente para empujar todo hacia el centro
+        panel.add(Box.createVerticalGlue());
+
+        JLabel labelPrincipal = new JLabel("Ingrese el nombre de la universidad");
         labelPrincipal.setFont(new Font("Arial", Font.BOLD, 20));
+        labelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(labelPrincipal);
 
-        JTextField universityNameField = new JTextField(20);
-        universityNameField.setPreferredSize(new Dimension(350, 40));
-        universityNameField.setFont(new Font("Arial", Font.PLAIN, 20));
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JButton agregarButton = new JButton("Agregar");
-        mainFrame.personalizarBoton(agregarButton, new Color(148, 13, 53), Color.WHITE, 15);
-        agregarButton.addActionListener(e -> mainFrame.showCard("VerUniversidad"));
+        JTextField nombreUniversidad = new JTextField();
+        nombreUniversidad.setPreferredSize(new Dimension(300, 30));
+        nombreUniversidad.setMaximumSize(nombreUniversidad.getPreferredSize());
+        nombreUniversidad.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(nombreUniversidad);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(agregarButton);
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(1, 20, 1, 20);
-        gbc.anchor = GridBagConstraints.CENTER;
+        // Panel para los botones
+        JPanel botonesPanel = new JPanel();
+        botonesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0));
+        botonesPanel.setBackground(new Color(251, 240, 242));
 
-        panel.add(labelPrincipal, gbc);
-        panel.add(Box.createVerticalStrut(5), gbc); // Add some spacing between the label and text field
-        panel.add(universityNameField, gbc);
-        panel.add(Box.createVerticalStrut(5), gbc); // Add some spacing between the text field and button
-        panel.add(buttonPanel, gbc);
+        JButton VerUniversidadButton = new JButton();
+        mainFrame.personalizarBoton(VerUniversidadButton, new Color(156, 64, 83), Color.WHITE, 10);
+        VerUniversidadButton.setText("Ver universidades");
+        VerUniversidadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        VerUniversidadButton.addActionListener(e -> {
+            nombreUniversidad.setText("");  // Vacía el campo de texto
+            mainFrame.showCard("BuscarUniversidad");
+        });
+
+        JButton AgregarButton = new JButton();
+        mainFrame.personalizarBoton(AgregarButton, new Color(156, 64, 83), Color.WHITE, 10);
+        AgregarButton.setText("Agregar");
+        AgregarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        AgregarButton.addActionListener(e -> {
+            String nombre = nombreUniversidad.getText();
+            if (!nombre.isEmpty()) {
+                sistemaUniversitario.agregarUniversidad(new Universidad(nombre));
+                JOptionPane.showMessageDialog(null, "Universidad agregada correctamente!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese un nombre de universidad.");
+            }
+        });
+
+        botonesPanel.add(VerUniversidadButton);
+        botonesPanel.add(AgregarButton);
+        panel.add(botonesPanel);
+
+        panel.add(Box.createVerticalGlue());
 
         return panel;
     }
+
 
 }

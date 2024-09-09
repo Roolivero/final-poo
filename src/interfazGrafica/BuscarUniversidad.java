@@ -11,6 +11,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.List;
 
+import static java.awt.Color.black;
+
 public class BuscarUniversidad extends JPanel {
     private MainFrame mainFrame;
     private JPanel mainPanel;
@@ -51,12 +53,13 @@ public class BuscarUniversidad extends JPanel {
     }
 
 
+
     private JPanel createTopPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panel.setBackground(new Color(251, 230, 236, 255));
         panel.setBorder(new LineBorder(new Color(156, 64, 83), 2));
         JButton volverButton = new JButton("Volver");
-        mainFrame.personalizarBoton(volverButton, new Color(156, 64, 83), Color.WHITE,10);
+        mainFrame.personalizarBoton(volverButton, new Color(156, 64, 83), Color.WHITE,12);
         volverButton.addActionListener(e -> {
             resetPanel();
             mainFrame.showCard("Main");
@@ -88,16 +91,20 @@ public class BuscarUniversidad extends JPanel {
 
     private JPanel createMainPanel() {
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Using BoxLayout to stack components vertically
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(new Color(251, 240, 242));
         panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, new Color(155, 63, 82)));
 
+        // Add vertical glue at the top
+        panel.add(Box.createVerticalGlue());
+
         JLabel labelPrincipal = new JLabel("Seleccione una universidad");
-        labelPrincipal.setFont(new Font("Arial", Font.BOLD, 20));
-        labelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the label
+        labelPrincipal.setFont(new Font("Arial", Font.BOLD,20));
+        labelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         panel.add(labelPrincipal);
 
-        panel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some space between components
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         //Inicializar sistema universitario
         sistemaUniversitario = SistemaUniversitario.getInstancia();
@@ -111,6 +118,15 @@ public class BuscarUniversidad extends JPanel {
 
             JComboBox<String> dropBox = new JComboBox<>(universidades);
             dropBox.setSelectedIndex(-1);
+
+            Font dropBoxFont = new Font("Arial", Font.PLAIN, 16);
+            dropBox.setFont(dropBoxFont);
+
+            Object popupComponent = dropBox.getUI().getAccessibleChild(dropBox, 0);
+            if (popupComponent instanceof JPopupMenu) {
+                JPopupMenu popup = (JPopupMenu) popupComponent;
+                popup.setFont(dropBoxFont);
+            }
 
             dropBox.addActionListener(e -> {
                 String universidad = (String) dropBox.getSelectedItem();
@@ -126,6 +142,9 @@ public class BuscarUniversidad extends JPanel {
         }
 
         panel.add(dropPanel);
+
+        // Add vertical glue at the bottom
+        panel.add(Box.createVerticalGlue());
 
         return panel;
     }

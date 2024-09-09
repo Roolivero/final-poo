@@ -16,13 +16,17 @@ import javax.swing.border.LineBorder;
 public class VerCarrera extends JPanel {
     private MainFrame mainFrame;
     private Carrera carrera;
-    private JPanel mainPanel;
     private JPanel cardPanel;
     private CardLayout cardLayout;
 
-    //Layouts para carreras
-    private CardLayout carrerasCardLayout;
-    private JPanel carrerasCardPanel;
+    // elementos para el topPanel
+    private JLabel nombreCarreraLabelTop;
+    private JPanel topPanel;
+
+    //Layout para el mainPanel
+    private CardLayout mainCardLayout;
+    private JPanel mainCardPanel;
+    private JLabel nombreCarreraLabelMain;
 
     //Layouts para materias
     private CardLayout materiasCardLayout;
@@ -36,26 +40,27 @@ public class VerCarrera extends JPanel {
     private CardLayout libretaCardLayout;
     private JPanel libretaCardPanel;
 
+    private JPanel buttonPanel;
 
     public VerCarrera (MainFrame mainFrame){
         this.mainFrame = mainFrame;
         setLayout(new BorderLayout());
 
-        // Top panel with "Volver" button
-        JPanel topPanel = createTopPanel();
+        // Panel superior con el boton "Volver"
+        topPanel = createTopPanel();
         add(topPanel, BorderLayout.NORTH);
 
-        // Left panel with navigation buttons
+        // Panel izquierdo con los botones
         JPanel leftPanel = createLeftPanel();
         add(leftPanel, BorderLayout.WEST);
 
-        // Main content panel with cards
+        // Panel principal con las cards
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         add(cardPanel, BorderLayout.CENTER);
 
-
         // Add cards to the cardPanel
+        cardPanel.add(createMainPanel(),"Principal");
         cardPanel.add(createMateriasPanel(), "Materias");
         cardPanel.add(createAlumnosPanel(), "Alumnos");
         cardPanel.add(createLibretaUniversitariaPanel(), "Libreta");
@@ -64,9 +69,19 @@ public class VerCarrera extends JPanel {
 
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
+        updateDisplay();
     }
 
     private void updateDisplay() {
+        // MainPanel
+        if (carrera != null) {
+            String nombre = "Bienvenido a: " + carrera.getNombre();
+            nombreCarreraLabelMain.setText(nombre);
+            nombreCarreraLabelTop.setText(nombre);
+        } else {
+            nombreCarreraLabelMain.setText("Bienvenido");
+            nombreCarreraLabelTop.setText("");
+        }
 
         // Panel para las materias
         materiasCardPanel.removeAll();
@@ -92,19 +107,65 @@ public class VerCarrera extends JPanel {
     }
 
     private JPanel createTopPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setBackground(new Color(225, 192, 199));
-        panel.setBorder(new LineBorder(new Color(156, 64, 83), 2));
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(new Color(251, 230, 236, 255));
+        topPanel.setBorder(new LineBorder(new Color(156, 64, 83), 2));
+
+        nombreCarreraLabelTop = new JLabel("");
+        nombreCarreraLabelTop.setFont(new Font("Open Sans", Font.BOLD, 16));
+        nombreCarreraLabelTop.setVisible(false);
+        topPanel.add(nombreCarreraLabelTop, BorderLayout.WEST);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
+
         JButton volverButton = new JButton("Volver");
-        mainFrame.personalizarBoton(volverButton, new Color(156, 64, 83), Color.WHITE,10);
+        mainFrame.personalizarBoton(volverButton, new Color(156, 64, 83), Color.WHITE, 12);
         volverButton.addActionListener(e -> mainFrame.showCard("Main"));
-        panel.add(volverButton);
+
+        buttonPanel.add(volverButton);
+
+        topPanel.add(buttonPanel, BorderLayout.EAST);
+
+        return topPanel;
+    }
+
+    private JPanel createMainPanel(){
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(251, 240, 242));
+        panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, new Color(156, 64, 83)));
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setBackground(new Color(251, 240, 242));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(0,10,10,10);
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+
+        nombreCarreraLabelMain = new JLabel("Bienvenido a: ");
+        nombreCarreraLabelMain.setFont(new Font("Open Sans", Font.BOLD, 20));
+        centerPanel.add(nombreCarreraLabelMain, gbc);
+
+        // panel vacío para mover el label
+        JPanel emptyPanel = new JPanel();
+        emptyPanel.setPreferredSize(new Dimension(10, 60));
+        emptyPanel.setBackground(new Color(251, 240, 242)); // Match background
+
+        // Add the empty panel to the NORTH
+        panel.add(emptyPanel, BorderLayout.SOUTH);
+        panel.add(centerPanel, BorderLayout.CENTER);
+
         return panel;
     }
 
+
     private JPanel createLeftPanel() {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(223, 190, 197));
+        panel.setBackground(new Color(251, 230, 236, 255));
         panel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2, new Color(155, 63, 82)));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(Box.createVerticalStrut(50));
@@ -116,7 +177,10 @@ public class VerCarrera extends JPanel {
             mainFrame.personalizarBoton(button, new Color(156, 64, 83), Color.WHITE,12);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
             button.setMaximumSize(new Dimension(150, 30));
-            button.addActionListener(e -> cardLayout.show(cardPanel, label));
+            button.addActionListener(e -> {
+                cardLayout.show(cardPanel, label);
+                mostrarLabelCarrera();
+            });
             panel.add(button);
             panel.add(Box.createVerticalStrut(15));
         }
@@ -124,27 +188,36 @@ public class VerCarrera extends JPanel {
         return panel;
     }
 
+    private void mostrarLabelCarrera(){
+        nombreCarreraLabelMain.setVisible(false);
+        nombreCarreraLabelTop.setText(carrera.getNombre());
+
+        nombreCarreraLabelTop.setVisible(true);
+        topPanel.revalidate();
+        topPanel.repaint();
+    }
+
     private JPanel createPanelVacio() {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         return panel;
     }
 
     private JPanel createMateriasPanel() {
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(251, 240, 242));
         panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, new Color(156, 64, 83)));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        buttonPanel.setBackground(new Color(251, 245, 248));
+        buttonPanel.setBackground(new Color(111, 0, 255));
 
         materiasCardLayout = new CardLayout();
         materiasCardPanel = new JPanel(materiasCardLayout);
-        materiasCardPanel.setBackground(new Color(251, 245, 248));
-        panel.add(materiasCardPanel,BorderLayout.CENTER);
+        materiasCardPanel.setBackground(new Color(251, 240, 242));
+        panel.add(materiasCardPanel, BorderLayout.CENTER);
 
-        materiasCardPanel.add(createPanelVacio(),"Vacio");
-        materiasCardLayout.show(materiasCardPanel,"Vacio");
+        materiasCardPanel.add(createPanelVacio(), "Vacio");
+        materiasCardLayout.show(materiasCardPanel, "Vacio");
 
         String[] materiasLabels = {"Ver listado", "Agregar"};
         for (String label : materiasLabels) {
@@ -155,12 +228,13 @@ public class VerCarrera extends JPanel {
             button.addActionListener(e -> {
                 if (label.equals("Ver listado")) {
                     materiasCardPanel.removeAll();
-                    materiasCardPanel.add(verMateriasPanel(), label);
+                    materiasCardPanel.add(verMateriasPanel(), "verListado");
+                    materiasCardLayout.show(materiasCardPanel, "verListado");
                 } else {
                     materiasCardPanel.removeAll();
-                    materiasCardPanel.add(agregarMateriasPanel(), label);
+                    materiasCardPanel.add(agregarMateriasPanel(), "agregar");
+                    materiasCardLayout.show(materiasCardPanel, "agregar");
                 }
-                materiasCardLayout.show(materiasCardPanel, label);
                 materiasCardPanel.revalidate();
                 materiasCardPanel.repaint();
             });
@@ -174,33 +248,65 @@ public class VerCarrera extends JPanel {
     private JPanel agregarMateriasPanel(){
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(251, 245, 248));
-        panel.add(new JLabel("Formulario para agregar materias"));
+        panel.setBackground(new Color(24, 58, 225));
+
+        JLabel titleLabel = new JLabel("Complete los datos de la materia: ");
+        titleLabel.setFont(new Font("Arial",Font.BOLD,18));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(titleLabel);
+        panel.add(Box.createVerticalStrut(10));
 
         JLabel nombre = new JLabel("Nombre:");
+        nombre.setAlignmentX(LEFT_ALIGNMENT);
         JTextField nombreField = new JTextField(15);
+        Dimension textFieldSize = new Dimension(250, 30);
+        nombreField.setMaximumSize(textFieldSize);
+        nombreField.setPreferredSize(textFieldSize);
+        nombreField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JLabel esObligatoria = new JLabel("Es obligatoria? :");
         String[] opciones1 = {"Si", "No"};
         JComboBox<String> opciones1Box = new JComboBox<>(opciones1);
+        Dimension box1 = new Dimension(250, 30);
+        opciones1Box.setPreferredSize(box1);
+        opciones1Box.setMaximumSize(box1);
+        opciones1Box.setAlignmentX(Component.CENTER_ALIGNMENT);
+        opciones1Box.setBackground(Color.white);
         opciones1Box.setSelectedIndex(-1);
+
         JLabel cuatrimestre = new JLabel("Cuatrimestre en el que se dicta :");
-        String[] opciones2 = {"1", "2","3","4","5","6","7", "8","9","10","11","12"};
+        cuatrimestre.setBackground(Color.white);
+        String[] opciones2 = {"1", "2","3","4","5","6","7", "8","9","10"};
         JComboBox<String> opciones2Box = new JComboBox<>(opciones2);
+        Dimension box2 = new Dimension(250, 30);
+        opciones2Box.setPreferredSize(box2);
+        opciones2Box.setMaximumSize(box2);
+        opciones2Box.setAlignmentX(Component.CENTER_ALIGNMENT);
         opciones2Box.setSelectedIndex(-1);
 
         JButton submitButton = new JButton("Agregar");
         submitButton.addActionListener(e -> {
-            nombreField.setText("");
             opciones1Box.setSelectedIndex(-1);
             opciones2Box.setSelectedIndex(-1);
             String nombreMateria = nombreField.getText();
             if (!nombreMateria.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Universidad agregada correctamente!");
+                JOptionPane.showMessageDialog(null, "Materia agregada correctamente!");
             } else {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese un nombre de universidad.");
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese el nombre de la materia.");
             }
         });
         mainFrame.personalizarBoton(submitButton,new Color(156, 64, 83), Color.WHITE, 10);
+
+        JButton verListadoButton = new JButton("Ver materias");
+        verListadoButton.addActionListener(e -> {
+            materiasCardPanel.removeAll();
+            materiasCardPanel.add(verMateriasPanel(), "verListado");
+            materiasCardLayout.show(materiasCardPanel, "verListado");
+            materiasCardPanel.revalidate();
+            materiasCardPanel.repaint();
+        });
+
+        mainFrame.personalizarBoton(verListadoButton,new Color(156, 64, 83), Color.WHITE, 10);
 
         panel.add(nombre);
         panel.add(nombreField);
@@ -209,13 +315,14 @@ public class VerCarrera extends JPanel {
         panel.add(cuatrimestre);
         panel.add(opciones2Box);
         panel.add(submitButton);
+        panel.add(verListadoButton);
 
         return panel;
     }
 
     private JPanel verMateriasPanel() {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(144, 10, 34));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JLabel tituloLabel = new JLabel("Listado de materias: ");
@@ -224,19 +331,29 @@ public class VerCarrera extends JPanel {
         panel.add(tituloLabel);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JPanel dropPanel = new JPanel();
-        dropPanel.setBackground(new Color(251, 245, 248));
-
         JPanel materiasPanel = new JPanel();
         materiasPanel.setLayout(new BoxLayout(materiasPanel, BoxLayout.Y_AXIS));
-        panel.add(materiasPanel);
+        materiasPanel.setBackground(new Color(239, 223, 227, 225));
+
+        JScrollPane scrollPanel = new JScrollPane(materiasPanel);
+        scrollPanel.setPreferredSize(new Dimension(350,180));
+        scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        //scrollPanel.setBorder(BorderFactory.createLineBorder(new Color(156, 64, 83), 2));
+
+        panel.add(scrollPanel);
 
         if (carrera != null && carrera.getMaterias() != null) {
             displaySubjectsForMateria(materiasPanel);
         } else {
-            dropPanel.add(new JLabel("No hay materias disponibles"));
+            materiasPanel.add(new JLabel("No hay materias disponibles"));
         }
-        panel.add(dropPanel);
+
+        panel.revalidate();
+        panel.repaint();
+        scrollPanel.revalidate();
+        scrollPanel.repaint();
 
         return panel;
     }
@@ -247,7 +364,7 @@ public class VerCarrera extends JPanel {
         if (carrera != null && carrera.getPlanEstudio() != null) {
             List<Materia> materias = carrera.getMaterias();
             for (Materia mat : materias) {
-                JLabel materiaLabel = new JLabel("* " + mat.getNombre());
+                JLabel materiaLabel = new JLabel(mat.getNombre());
                 materiaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 subjectsPanel.add(materiaLabel);
                 subjectsPanel.add(Box.createVerticalStrut(5));
@@ -263,15 +380,15 @@ public class VerCarrera extends JPanel {
 
     private JPanel createAlumnosPanel() {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, new Color(156, 64, 83)));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        buttonPanel.setBackground(new Color(251, 245, 248));
+        buttonPanel.setBackground(new Color(251, 240, 242));
 
         alumnosCardLayout = new CardLayout();
         alumnosCardPanel = new JPanel(alumnosCardLayout);
-        alumnosCardPanel.setBackground(new Color(251, 245, 248));
+        alumnosCardPanel.setBackground(new Color(251, 240, 242));
         panel.add(alumnosCardPanel, BorderLayout.CENTER);
 
         alumnosCardPanel.add(createPanelVacio(),"Vacio");
@@ -307,14 +424,14 @@ public class VerCarrera extends JPanel {
 
     private JPanel inscribirAlumnosPanel(){
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         panel.add(new JLabel("Formulario para inscribir un alumno a una carrera"));
         return panel;
     }
 
     private JPanel verAlumnosPanel(){
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JLabel tituloLabel = new JLabel("Contenido del listado de alumnos");
@@ -324,7 +441,7 @@ public class VerCarrera extends JPanel {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel dropPanel = new JPanel();
-        dropPanel.setBackground(new Color(251, 245, 248));
+        dropPanel.setBackground(new Color(251, 240, 242));
 
         JPanel alumnosPanel = new JPanel();
         alumnosPanel.setLayout(new BoxLayout(alumnosPanel, BoxLayout.Y_AXIS));
@@ -387,7 +504,7 @@ public class VerCarrera extends JPanel {
 
     private JPanel inscribirAlumnosMateriaPanel(){
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         panel.add(new JLabel("Formulario para inscribir a un alumo a una materia"));
         return panel;
     }
@@ -395,15 +512,15 @@ public class VerCarrera extends JPanel {
 
     private JPanel createLibretaUniversitariaPanel() {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         panel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, new Color(156, 64, 83)));
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        buttonPanel.setBackground(new Color(251, 245, 248));
+        buttonPanel.setBackground(new Color(251, 240, 242));
 
         libretaCardLayout = new CardLayout();
         libretaCardPanel = new JPanel(libretaCardLayout);
-        libretaCardPanel.setBackground(new Color(251, 245, 248));
+        libretaCardPanel.setBackground(new Color(251, 240, 242));
         panel.add(libretaCardPanel, BorderLayout.CENTER);
 
         libretaCardPanel.add(createPanelVacio(),"Vacio");
@@ -437,7 +554,7 @@ public class VerCarrera extends JPanel {
 
     private JPanel verLibretaPanel() {
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JLabel tituloLabel = new JLabel("Libreta universitaria");
@@ -447,7 +564,7 @@ public class VerCarrera extends JPanel {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel dropPanel = new JPanel();
-        dropPanel.setBackground(new Color(251, 245, 248));
+        dropPanel.setBackground(new Color(251, 240, 242));
         dropPanel.setLayout(new FlowLayout());
 
         JPanel libretaPanel = new JPanel();
@@ -514,7 +631,7 @@ public class VerCarrera extends JPanel {
 
     private JPanel agregarMateriaLibretaPanel(){
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
         panel.add(new JLabel("Formulario para agregar materias a la libreta de un alumno"));
         return panel;
     }

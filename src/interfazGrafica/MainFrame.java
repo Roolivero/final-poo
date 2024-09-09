@@ -24,6 +24,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         //Para visualizar los datos ya cargados en el sistema
         Datos datos = new Datos();
@@ -31,6 +32,12 @@ public class MainFrame extends JFrame {
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
+
+        // Fijar el tamaño del cardPanel
+        Dimension fixedSize = new Dimension(500, 400);
+        cardPanel.setPreferredSize(fixedSize);
+        cardPanel.setMinimumSize(fixedSize);
+        cardPanel.setMaximumSize(fixedSize);
 
         // Crear y agregar los paneles al cardPanel
         cardPanel.add(createMainPanel(), "Main");
@@ -50,26 +57,26 @@ public class MainFrame extends JFrame {
     private JPanel createMainPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(251, 245, 248));
+        panel.setBackground(new Color(251, 240, 242));
 
-        JLabel bienvenidaLabel = new JLabel("Bienvenidos al sistema universitario");
-        bienvenidaLabel.setFont((new Font("Arial",Font.PLAIN,20)));
+        JLabel bienvenidaLabel = new JLabel("Bienvenido al sistema universitario");
+        bienvenidaLabel.setFont((new Font("Arial",Font.BOLD,22)));
         bienvenidaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createVerticalGlue());
         panel.add(Box.createVerticalStrut(40 ));
 
         // Create a panel for buttons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(251, 245, 248));
+        buttonPanel.setBackground(new Color(251, 240, 242));
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JButton buscarUniversidadButton = new JButton("Buscar universidad");
-        personalizarBoton(buscarUniversidadButton, new Color(156, 64, 83), Color.WHITE,15);
+        personalizarBoton(buscarUniversidadButton, new Color(156, 64, 83), Color.WHITE,16);
         buscarUniversidadButton.addActionListener(e -> cardLayout.show(cardPanel, "BuscarUniversidad"));
 
         JButton agregarUniversidadButton = new JButton("Agregar universidad");
-        personalizarBoton(agregarUniversidadButton, new Color(156, 64, 83), Color.WHITE,15);
+        personalizarBoton(agregarUniversidadButton, new Color(156, 64, 83), Color.WHITE,16);
         agregarUniversidadButton.addActionListener(e -> cardLayout.show(cardPanel, "AgregarUniversidad"));
 
         buttonPanel.add(buscarUniversidadButton);

@@ -2,6 +2,7 @@ package interfazGrafica;
 
 import cargaDeDatos.Datos;
 import carrera.Carrera;
+import materia.Materia;
 import sistemaUniversitario.SistemaUniversitario;
 import universidad.Universidad;
 

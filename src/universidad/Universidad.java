@@ -5,32 +5,35 @@ import sistemaUniversitario.SistemaUniversitario;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class Universidad {
-    //Atributos
+    // Atributos
     private List<Carrera> listaCarreras;
     private String nombre;
     private static Universidad instancia;
 
-    //Constructor 
-    public Universidad(String nombre){
-        this.setNombre(nombre);
+    // Constructor privado
+    private Universidad(String nombre) {
+        this.nombre = nombre;
         this.listaCarreras = new ArrayList<>();
     }
 
-    public List<Carrera> agregarCarreras(Carrera carrera){
-        this.getListaCarreras().add(carrera);
-        return listaCarreras;
+    // Método estático para obtener la única instancia
+    public static Universidad getInstancia(String nombre) {
+        if (instancia == null) {
+            instancia = new Universidad(nombre);
+        }
+        return instancia;
     }
 
+    public void agregarCarrera(Carrera carrera) {
+        this.listaCarreras.add(carrera);
+    }
 
-    //Setters y getters
-    public void setNombre(String nombre){this.nombre = nombre;}
-    public String getNombre(){return this.nombre; }
     public List<Carrera> getListaCarreras() {
         return this.listaCarreras;
     }
-    public Universidad getInstancia() {
-        return instancia;
+
+    public String getNombre() {
+        return this.nombre;
     }
 }

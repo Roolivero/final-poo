@@ -2,75 +2,138 @@ package interfazGrafica;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.stream.Stream;
 
 public class MainFrame extends JFrame {
 
-    private JPanel panelPrincipal;
+    private JPanel mainPanel;
+    private JPanel panelBotones;
+    private JPanel panelCentro;
 
     public MainFrame() {
 
-        setTitle("Universidad Nacional Tierra del Fuego");
+        setTitle("Sisitema Universitario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
-        setResizable(false);
         setLocationRelativeTo(null);
 
-        panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(new BorderLayout());
-        panelPrincipal.setBackground(new Color(251, 240, 242));
+        mainPanel = new JPanel(new BorderLayout());
 
-        panelBienvenida();
+        JLabel labelTitulo = new JLabel("Universidad Nacional Tierra del Fuego", SwingConstants.CENTER);
+        labelTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        mainPanel.setBackground(new Color(114, 83, 151, 197));
+        mainPanel.add(labelTitulo, BorderLayout.NORTH);
 
-        add(panelPrincipal);
+        panelBotones = new JPanel();
 
+        panelBotones.setLayout(new GridLayout(0, 1, 5, 2));
+        JButton botonCarreras = new JButton("Carreras");
+        personalizarBoton(botonCarreras,new Color(67, 24, 90), Color.WHITE,18);
+        JButton botonMaterias = new JButton("Materias");
+        personalizarBoton(botonMaterias,new Color(67, 24, 90), Color.WHITE,18);
+        JButton botonAlumnos= new JButton("Alumnos");
+        personalizarBoton(botonAlumnos,new Color(67, 24, 90), Color.WHITE,18);
+
+        panelBotones.add(botonCarreras);
+        panelBotones.add(botonMaterias);
+        panelBotones.add(botonAlumnos);
+        mainPanel.add(panelBotones, BorderLayout.WEST);
+
+        panelCentro = new JPanel();
+        panelCentro.setBackground(new Color(219, 202, 243));
+        mainPanel.add(panelCentro, BorderLayout.CENTER);
+
+
+        botonCarreras.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel("carrera");
+            }
+        });
+
+        botonMaterias.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel("materia");
+            }
+        });
+
+        botonAlumnos.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanel("alumno");
+            }
+        });
+
+        // Configurar el content pane del JFrame
+        setContentPane(mainPanel);
+        setVisible(true);
     }
 
-    private void panelBienvenida(){
-        panelPrincipal.removeAll();
-
-        JLabel welcomeLabel = new JLabel("Bienvenido a la Universidad Nacional Tierra del Fuego", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        welcomeLabel.setBorder(BorderFactory.createEmptyBorder(200, 0, 20, 0));
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
-
-        JButton buscarCarreraButton = new JButton("Buscar carrera");
-        buscarCarreraButton.setPreferredSize(new Dimension(200, 50));
-        personalizarBoton(buscarCarreraButton,new Color(156, 64, 83), Color.WHITE,16);
-
-        JButton agregarCarreraButton = new JButton("Agregar carrera");
-        agregarCarreraButton.setPreferredSize(new Dimension(200, 50));
-        personalizarBoton(agregarCarreraButton,new Color(156, 64, 83), Color.WHITE,16);
-
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
-
-        buttonPanel.add(buscarCarreraButton);
-        buttonPanel.add(agregarCarreraButton);
-        buttonPanel.setBackground(new Color(251, 240, 242));
-
-        panelPrincipal.add(welcomeLabel, BorderLayout.NORTH);
-        panelPrincipal.add(buttonPanel, BorderLayout.CENTER);
-
-        buscarCarreraButton.addActionListener(e -> mostrarPanelBuscarCarrera());
-        agregarCarreraButton.addActionListener(e -> System.out.println("Agregar carrera presionado"));
-
-        panelPrincipal.revalidate();
-        panelPrincipal.repaint();
+    //Método para actualizar el panel central
+    private void actualizarPanelCentro(String contenido) {
+        panelCentro.removeAll();
+        panelCentro.add(new JLabel(contenido, SwingConstants.CENTER));
+        panelCentro.revalidate();
+        panelCentro.repaint();
     }
 
-    private void mostrarPanelBuscarCarrera(){
-        panelPrincipal.removeAll();
+    private void mostrarPanel(String nombre) {
+        panelCentro.removeAll();
+        panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
+        panelCentro.add(Box.createVerticalGlue());
 
-        BuscarCarrera buscarCarrera = new BuscarCarrera(this);
-        panelPrincipal.add(buscarCarrera, BorderLayout.CENTER);
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 180));
+        panelBotones.setOpaque(false);
 
-        panelPrincipal.revalidate();
-        panelPrincipal.repaint();
+        String botonVer = "Ver " + nombre;
+        String botonAgregar = "Agregar " + nombre;
+
+        JButton verCarrera = new JButton(botonVer);
+        personalizarBoton(verCarrera, new Color(166, 144, 246),new Color(10, 2, 43), 18);
+        verCarrera.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                panelCentro.removeAll();
+                panelCentro.setLayout(new BorderLayout());
+                if("carrera".equalsIgnoreCase(nombre)){
+                    panelCentro.add(new VerCarrera(), BorderLayout.CENTER);
+                } else if ("materia".equalsIgnoreCase(nombre)){
+                    panelCentro.add(new VerMateria(),BorderLayout.CENTER);
+                } else if ("alumno".equalsIgnoreCase(nombre)){
+                    panelCentro.add(new VerAlumno(),BorderLayout.CENTER);
+                }
+                panelCentro.revalidate();
+                panelCentro.repaint();
+            }
+        });
+        panelBotones.add(verCarrera);
+
+        JButton agregarCarreras = new JButton(botonAgregar);
+        personalizarBoton(agregarCarreras, new Color(166, 144, 246), new Color(10, 2, 43), 18);
+        agregarCarreras.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                panelCentro.removeAll();
+                panelCentro.setLayout(new BorderLayout());
+                if("carrera".equalsIgnoreCase(nombre)){
+                    panelCentro.add(new CrearCarrera(), BorderLayout.CENTER);
+                } else if ("materia".equalsIgnoreCase(nombre)){
+                    panelCentro.add(new CrearMateria(),BorderLayout.CENTER);
+                } else if ("alumno".equalsIgnoreCase(nombre)){
+                    panelCentro.add(new CrearAlumno(),BorderLayout.CENTER);
+                }
+                panelCentro.revalidate();
+                panelCentro.repaint();
+            }
+        });
+        panelBotones.add(agregarCarreras);
+
+        panelCentro.add(panelBotones);
+        panelCentro.add(Box.createVerticalGlue());
+        panelCentro.revalidate();
+        panelCentro.repaint();
     }
+
 
     public void personalizarBoton(JButton boton, Color colorFondo, Color colorTexto, int size) {
         boton.setFont(new Font("Open Sans", Font.BOLD, size));

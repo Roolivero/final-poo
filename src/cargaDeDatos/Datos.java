@@ -18,17 +18,17 @@ public class Datos {
     public void cargarDatos() {
         SistemaUniversitario sistema1 = SistemaUniversitario.getInstancia();
 
-        Universidad universidad1 = new Universidad("Universidad Nacional Tierra del Fuego");
+        Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
 
-        sistema1.agregarUniversidad(universidad1);
+        sistema1.agregarUniversidad(universidad);
 
         PlanEstudio planA = new PlanEstudio('A');
         PlanEstudio planB = new PlanEstudio('B');
         Carrera carrera1 = new Carrera("Lic. en sistemas", 5, planA);
         Carrera carera2 = new Carrera("Geologia",5,planB);
 
-        universidad1.agregarCarreras(carrera1);
-        universidad1.agregarCarreras(carera2);
+        universidad.agregarCarrera(carrera1);
+        universidad.agregarCarrera(carera2);
 
         Materia materia1 = new Materia("Algebra", true, 1);
         Materia materia2 = new Materia("Elementos de Informática", true, 1);

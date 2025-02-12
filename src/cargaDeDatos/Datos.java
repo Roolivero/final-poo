@@ -52,6 +52,17 @@ public class Datos {
         carrera1.agregarMaterias(materia9);
         carrera1.agregarMaterias(materia10);
 
+        universidad.agregarMateria(materia1);
+        universidad.agregarMateria(materia2);
+        universidad.agregarMateria(materia3);
+        universidad.agregarMateria(materia4);
+        universidad.agregarMateria(materia5);
+        universidad.agregarMateria(materia6);
+        universidad.agregarMateria(materia7);
+        universidad.agregarMateria(materia8);
+        universidad.agregarMateria(materia9);
+        universidad.agregarMateria(materia10);
+
         planA.grafoMaterias(materia1,materia8);
         planA.grafoMaterias(materia5,materia8);
         planA.grafoMaterias(materia2,materia10);

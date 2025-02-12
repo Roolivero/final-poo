@@ -9,14 +9,11 @@ import universidad.Universidad;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI;
 
 public class VerCarrera extends JPanel {
 
@@ -34,6 +31,9 @@ public class VerCarrera extends JPanel {
     private DefaultListModel<String> modeloAlumnos;
     private JList<String> listaMaterias;
     private DefaultListModel<String> modeloMaterias;
+    private DefaultListModel<String> modeloAgregarMaterias;
+    private JList<String> listaAgregarMaterias;
+
 
     public VerCarrera(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -135,8 +135,6 @@ public class VerCarrera extends JPanel {
 
                 Font fontNormal = new Font("Arial", Font.PLAIN, 14);
                 Font fontNegrita = new Font("Arial", Font.BOLD, 14);
-
-                // Si el texto empieza con "Cuatrimestre", lo ponemos en negrita
                 if (value.toString().startsWith("Cuatrimestre")) {
                     label.setFont(fontNegrita);
                 } else {
@@ -146,11 +144,61 @@ public class VerCarrera extends JPanel {
                 return label;
             }
         };
-
         listaMaterias.setCellRenderer(rendererMaterias);
         listaMaterias.setFont(new Font("Arial", Font.PLAIN, 14));;
         panelMaterias.add(new JScrollPane(listaMaterias), BorderLayout.CENTER);
         tabbedPane.addTab("Materias por Cuatrimestre", panelMaterias);
+
+        // Pestaña 3: Agregar Materias
+        JPanel panelAgregarMaterias = new JPanel(new BorderLayout());
+        modeloAgregarMaterias = new DefaultListModel<>();
+        listaAgregarMaterias = new JList<>(modeloAgregarMaterias);
+        listaAgregarMaterias.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelAgregarMaterias.add(new JScrollPane(listaAgregarMaterias), BorderLayout.CENTER);
+
+        JButton btnAgregarMateria = new JButton("Agregar Materia");
+        btnAgregarMateria.setFont(new Font("Arial", Font.BOLD, 14));
+        btnAgregarMateria.addActionListener(e -> {
+            String materiaSeleccionada = listaAgregarMaterias.getSelectedValue();
+            if (materiaSeleccionada == null) {
+                JOptionPane.showMessageDialog(this, "Por favor, seleccione una materia para agregar.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            Materia materia = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
+                    .getListaMaterias()
+                    .stream()
+                    .filter(m -> m.getNombre().equals(materiaSeleccionada))
+                    .findFirst()
+                    .orElse(null);
+
+            if (materia == null) {
+                JOptionPane.showMessageDialog(this, "Materia no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String carreraSeleccionada = (String) comboCarreras.getSelectedItem();
+            Carrera carrera = listaCarreras.stream()
+                    .filter(c -> c.getNombre().equals(carreraSeleccionada))
+                    .findFirst()
+                    .orElse(null);
+            if (carrera == null) {
+                JOptionPane.showMessageDialog(this, "Carrera no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (carrera.getMaterias().contains(materia)) {
+                JOptionPane.showMessageDialog(this, "La materia ya se encuentra agregada a la carrera.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                carrera.getMaterias().add(materia);
+                labelCantidadMaterias.setText("Cantidad de materias: " + carrera.getMaterias().size());
+                actualizarListaMaterias(carrera);
+
+                JOptionPane.showMessageDialog(this, "Materia agregada a la carrera.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        panelAgregarMaterias.add(btnAgregarMateria, BorderLayout.SOUTH);
+        tabbedPane.addTab("Agregar Materias", panelAgregarMaterias);
 
         panelInfoCarrera.add(labelNombre);
         panelInfoCarrera.add(Box.createVerticalStrut(5));
@@ -210,9 +258,31 @@ public class VerCarrera extends JPanel {
                             modeloMaterias.addElement(" - " + m.getNombre());
                         }
                     }
+
+                    modeloAgregarMaterias.clear();
+                    List<Materia> listaTodasMaterias = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
+                    for (Materia materia : listaTodasMaterias) {
+                        modeloAgregarMaterias.addElement(materia.getNombre());
+                    }
                 }
             }
         });
+    }
+
+    private void actualizarListaMaterias(Carrera carrera) {
+        modeloMaterias.clear();
+        Map<Integer, List<Materia>> materiasPorCuatrimestre = new TreeMap<>();
+        for (Materia m : carrera.getMaterias()) {
+            int cuatrimestre = m.getCuatrimestre();
+            materiasPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
+            materiasPorCuatrimestre.get(cuatrimestre).add(m);
+        }
+        for (Map.Entry<Integer, List<Materia>> entry : materiasPorCuatrimestre.entrySet()) {
+            modeloMaterias.addElement("Cuatrimestre " + entry.getKey() + ":");
+            for (Materia m : entry.getValue()) {
+                modeloMaterias.addElement(" - " + m.getNombre());
+            }
+        }
     }
 
 }

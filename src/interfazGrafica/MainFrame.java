@@ -71,15 +71,13 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
-    //Método para actualizar el panel central
-    private void actualizarPanelCentro(String contenido) {
+    public void actualizarPanelCentro() {
         panelCentro.removeAll();
-        panelCentro.add(new JLabel(contenido, SwingConstants.CENTER));
         panelCentro.revalidate();
         panelCentro.repaint();
     }
 
-    private void mostrarPanel(String nombre) {
+    public void mostrarPanel(String nombre) {
         panelCentro.removeAll();
         panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
         panelCentro.add(Box.createVerticalGlue());
@@ -97,7 +95,7 @@ public class MainFrame extends JFrame {
                 panelCentro.removeAll();
                 panelCentro.setLayout(new BorderLayout());
                 if("carrera".equalsIgnoreCase(nombre)){
-                    panelCentro.add(new VerCarrera(), BorderLayout.CENTER);
+                    panelCentro.add(new VerCarrera(MainFrame.this), BorderLayout.CENTER);
                 } else if ("materia".equalsIgnoreCase(nombre)){
                     panelCentro.add(new VerMateria(),BorderLayout.CENTER);
                 } else if ("alumno".equalsIgnoreCase(nombre)){
@@ -116,7 +114,7 @@ public class MainFrame extends JFrame {
                 panelCentro.removeAll();
                 panelCentro.setLayout(new BorderLayout());
                 if("carrera".equalsIgnoreCase(nombre)){
-                    panelCentro.add(new CrearCarrera(), BorderLayout.CENTER);
+                    panelCentro.add(new CrearCarrera(MainFrame.this), BorderLayout.CENTER);
                 } else if ("materia".equalsIgnoreCase(nombre)){
                     panelCentro.add(new CrearMateria(),BorderLayout.CENTER);
                 } else if ("alumno".equalsIgnoreCase(nombre)){

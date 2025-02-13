@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class VerCarrera extends JPanel {
 
@@ -33,6 +35,7 @@ public class VerCarrera extends JPanel {
     private DefaultListModel<String> modeloMaterias;
     private DefaultListModel<String> modeloAgregarMaterias;
     private JList<String> listaAgregarMaterias;
+    private List<Materia> listaTodasMateriasCompleta;
 
 
     public VerCarrera(MainFrame mainFrame) {
@@ -151,6 +154,11 @@ public class VerCarrera extends JPanel {
 
         // Pestaña 3: Agregar Materias
         JPanel panelAgregarMaterias = new JPanel(new BorderLayout());
+
+        JTextField searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(250, 30));
+        panelAgregarMaterias.add(searchField, BorderLayout.NORTH);
+
         modeloAgregarMaterias = new DefaultListModel<>();
         listaAgregarMaterias = new JList<>(modeloAgregarMaterias);
         listaAgregarMaterias.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -158,6 +166,7 @@ public class VerCarrera extends JPanel {
 
         JButton btnAgregarMateria = new JButton("Agregar Materia");
         btnAgregarMateria.setFont(new Font("Arial", Font.BOLD, 14));
+
         btnAgregarMateria.addActionListener(e -> {
             String materiaSeleccionada = listaAgregarMaterias.getSelectedValue();
             if (materiaSeleccionada == null) {
@@ -259,14 +268,26 @@ public class VerCarrera extends JPanel {
                         }
                     }
 
-                    modeloAgregarMaterias.clear();
-                    List<Materia> listaTodasMaterias = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
-                    for (Materia materia : listaTodasMaterias) {
-                        modeloAgregarMaterias.addElement(materia.getNombre());
-                    }
+                    listaTodasMateriasCompleta = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
+                    actualizarModeloAgregarMaterias("");
+
                 }
             }
         });
+
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { actualizar(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { actualizar(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { actualizar(); }
+            private void actualizar() {
+                String filtro = searchField.getText().toLowerCase();
+                actualizarModeloAgregarMaterias(filtro);
+            }
+        });
+
     }
 
     private void actualizarListaMaterias(Carrera carrera) {
@@ -281,6 +302,15 @@ public class VerCarrera extends JPanel {
             modeloMaterias.addElement("Cuatrimestre " + entry.getKey() + ":");
             for (Materia m : entry.getValue()) {
                 modeloMaterias.addElement(" - " + m.getNombre());
+            }
+        }
+    }
+
+    private void actualizarModeloAgregarMaterias(String filtro) {
+        modeloAgregarMaterias.clear();
+        for (Materia materia : listaTodasMateriasCompleta) {
+            if (materia.getNombre().toLowerCase().contains(filtro)) {
+                modeloAgregarMaterias.addElement(materia.getNombre());
             }
         }
     }

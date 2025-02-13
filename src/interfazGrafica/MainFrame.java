@@ -97,7 +97,7 @@ public class MainFrame extends JFrame {
                 if("carrera".equalsIgnoreCase(nombre)){
                     panelCentro.add(new VerCarrera(MainFrame.this), BorderLayout.CENTER);
                 } else if ("materia".equalsIgnoreCase(nombre)){
-                    panelCentro.add(new VerMateria(),BorderLayout.CENTER);
+                    panelCentro.add(new VerMateria(MainFrame.this),BorderLayout.CENTER);
                 } else if ("alumno".equalsIgnoreCase(nombre)){
                     panelCentro.add(new VerAlumno(),BorderLayout.CENTER);
                 }
@@ -116,7 +116,7 @@ public class MainFrame extends JFrame {
                 if("carrera".equalsIgnoreCase(nombre)){
                     panelCentro.add(new CrearCarrera(MainFrame.this), BorderLayout.CENTER);
                 } else if ("materia".equalsIgnoreCase(nombre)){
-                    panelCentro.add(new CrearMateria(),BorderLayout.CENTER);
+                    panelCentro.add(new CrearMateria(MainFrame.this),BorderLayout.CENTER);
                 } else if ("alumno".equalsIgnoreCase(nombre)){
                     panelCentro.add(new CrearAlumno(),BorderLayout.CENTER);
                 }

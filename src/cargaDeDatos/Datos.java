@@ -63,15 +63,17 @@ public class Datos {
         universidad.agregarMateria(materia9);
         universidad.agregarMateria(materia10);
 
-        planA.grafoMaterias(materia1,materia8);
-        planA.grafoMaterias(materia5,materia8);
-        planA.grafoMaterias(materia2,materia10);
-        planA.grafoMaterias(materia3,materia4);
-        planA.grafoMaterias(materia4,materia7);
-        planA.grafoMaterias(materia3,materia7);
-        planA.grafoMaterias(materia6,materia7);
-        planA.grafoMaterias(materia3,materia7);
-        planA.grafoMaterias(materia9,null);
+        planA.grafoMaterias(materia8, materia1);  // Estadística depende de Álgebra
+        planA.grafoMaterias(materia8, materia5);  // Estadística depende de Análisis Matemático
+        planA.grafoMaterias(materia10, materia2); // Arquitectura de Computadoras depende de Elementos de Informática
+        planA.grafoMaterias(materia4, materia3);  // Algorítmica y Programación I depende de Expresión de Problemas y Algoritmos
+        planA.grafoMaterias(materia7, materia4);  // Algorítmica y Programación II depende de Algorítmica y Programación I
+        planA.grafoMaterias(materia7, materia3);  // Algorítmica y Programación II depende de Expresión de Problemas y Algoritmos
+        planA.grafoMaterias(materia7, materia6);  // Algorítmica y Programación II depende de Elementos de Lógica y Matemática Discreta
+        planA.grafoMaterias(materia9, null); // Sistemas y Organizaciones no depende de nadie
+        planA.grafoMaterias(materia6, null); // Elementos de Lógica y Matemática Discreta no depende de nadie
+        planA.grafoMaterias(materia1, null); // Álgebra no depende de nadie
+        planA.grafoMaterias(materia2, null); // Elementos de informatica no depende de nadie
 
 
         Materia materia1Geologia = new Materia("introduccion a la geologia",true,1);
@@ -83,6 +85,9 @@ public class Datos {
         Alumno alumno2 = new Alumno("Giuliano ignacio", "Poeta", "41789518", LocalDate.of(1999, 9, 14),new Libreta());
         Alumno alumno3 = new Alumno("Ignacio", "Sanchez", "51893674", LocalDate.of(2002, 8, 3),new Libreta());
 
+        universidad.agregarAlumno(alumno1);
+        universidad.agregarAlumno(alumno2);
+        universidad.agregarAlumno(alumno3);
 
         carrera1.inscribirAlumno(alumno1);
         carrera1.inscribirAlumno(alumno2);
@@ -107,6 +112,7 @@ public class Datos {
         System.out.println("Las materias con sus correlativas son: ");
         planA.getGrafo().print();
 
+        System.out.println("Las materia : " );
 
 
 

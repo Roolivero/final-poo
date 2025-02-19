@@ -15,17 +15,17 @@ public class CrearMateria extends JPanel {
     private JTextField campoNombre;
     private JComboBox<String> comboTipo;
     private JComboBox<String> comboCuatrimestre;
+    private JPanel panelBotonVolver;
 
     public CrearMateria(MainFrame mainFrame) {
 
         Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
 
-        JPanel panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton botonVolver = new JButton("Volver");
         mainFrame.personalizarBoton(botonVolver, new Color(166, 144, 246), new Color(10, 2, 43), 14);
-        botonVolver.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         botonVolver.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -34,14 +34,16 @@ public class CrearMateria extends JPanel {
         });
 
         panelBotonVolver.add(botonVolver);
-        add(panelBotonVolver);
+        add(panelBotonVolver, BorderLayout.NORTH);
+//        revalidate();
+//        repaint();
 
         JPanel panelFormulario = new JPanel();
         panelFormulario.setLayout(new BoxLayout(panelFormulario, BoxLayout.Y_AXIS));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JPanel panelNombre = new JPanel();
-        panelNombre.setLayout(new BoxLayout(panelNombre, BoxLayout.X_AXIS));
+        JPanel panelNombre = new JPanel(new FlowLayout(FlowLayout.CENTER));
+       // panelNombre.setLayout(new BoxLayout(panelNombre, BoxLayout.X_AXIS));
         JLabel labelNombre = new JLabel("Nombre de la materia:");
         campoNombre = new JTextField(20);
         campoNombre.setPreferredSize(new Dimension(250, 30));
@@ -54,9 +56,9 @@ public class CrearMateria extends JPanel {
         panelFormulario.add(panelNombre);
         panelFormulario.add(Box.createVerticalStrut(10));
 
-        JPanel panelTipo = new JPanel();
-        panelTipo.setLayout(new BoxLayout(panelTipo, BoxLayout.X_AXIS));
-        JLabel labelTipo = new JLabel("Tipo:");
+        JPanel panelTipo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+       // panelTipo.setLayout(new BoxLayout(panelTipo, BoxLayout.X_AXIS));
+        JLabel labelTipo = new JLabel("Tipo de materia:");
         String[] opcionesTipo = {"Obligatoria", "Optativa"};
         comboTipo = new JComboBox<>(opcionesTipo);
 
@@ -91,9 +93,9 @@ public class CrearMateria extends JPanel {
         panelFormulario.add(Box.createVerticalStrut(10));
 
 
-        JPanel panelCuatrimestre = new JPanel();
-        panelCuatrimestre.setLayout(new BoxLayout(panelCuatrimestre, BoxLayout.X_AXIS));
-        JLabel labelCuatrimestre = new JLabel("Cuatrimestre en la que se dicta:");
+        JPanel panelCuatrimestre = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        //panelCuatrimestre.setLayout(new BoxLayout(panelCuatrimestre, BoxLayout.X_AXIS));
+        JLabel labelCuatrimestre = new JLabel("Cuatrimestre:");
         String[] opcionesPlan = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
         comboCuatrimestre = new JComboBox<>(opcionesPlan);
 
@@ -120,7 +122,7 @@ public class CrearMateria extends JPanel {
         comboCuatrimestre.setPreferredSize(tamañoComboPlan);
         comboCuatrimestre.setMaximumSize(tamañoComboPlan);
         panelCuatrimestre.add(labelCuatrimestre);
-        panelCuatrimestre.add(Box.createHorizontalStrut(5)); // Espacio horizontal
+        panelCuatrimestre.add(Box.createHorizontalStrut(5));
         panelCuatrimestre.add(comboCuatrimestre);
         panelCuatrimestre.setMaximumSize(panelCuatrimestre.getPreferredSize());
         panelFormulario.add(panelCuatrimestre);
@@ -154,35 +156,31 @@ public class CrearMateria extends JPanel {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione el tipo de materia.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int tipo;
-        try {
-            tipo = Integer.parseInt(tipoObj.toString());
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El tipo seleccionado no es válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        String tipoSeleccionado = tipoObj.toString();
 
         Object itemSeleccionado = comboCuatrimestre.getSelectedItem();
         if (itemSeleccionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un cuatrimestre.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        int cuatrimestre = ((String) itemSeleccionado).charAt(0);
+        int cuatrimestre = Integer.parseInt(itemSeleccionado.toString());
+
+        Materia materia;
 
         if(tipoObj.equals("Obligatoria")){
-            Materia materia = new Materia(nombre, true,cuatrimestre);
+            materia = new Materia(nombre, true,cuatrimestre);
+        } else {
+            materia = new Materia(nombre, false,cuatrimestre);
         }
-
-        // Agregar la carrera a la Universidad
+        
         Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
-        universidad.agregarCarrera(nuevaCarrera);
+        universidad.agregarMateria(materia);
 
-        //JOptionPane.showMessageDialog(this, "¡Carrera creada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         JOptionPane.showMessageDialog(this,
-                "¡Carrera creada exitosamente!\n\n" +
+                "¡Materia creada exitosamente!\n\n" +
                         "Nombre: " + nombre + "\n" +
-                        "Duración: " + duracion + " años\n" +
-                        "Plan de Estudio: " + planEstudioChar,
+                        "Tipo: " + tipoSeleccionado + "\n" +
+                        "Cuatrimestre: " + cuatrimestre,
                 "Éxito",
                 JOptionPane.INFORMATION_MESSAGE);
 

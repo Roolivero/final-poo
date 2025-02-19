@@ -1,5 +1,6 @@
 package universidad;
 
+import alumno.Alumno;
 import carrera.Carrera;
 import materia.Materia;
 import sistemaUniversitario.SistemaUniversitario;
@@ -12,12 +13,14 @@ public class Universidad {
     private String nombre;
     private static Universidad instancia;
     private List<Materia> listaMaterias;
+    private List<Alumno> listaAlumnos;
 
     // Constructor privado
     private Universidad(String nombre) {
         this.nombre = nombre;
         this.listaCarreras = new ArrayList<>();
         this.listaMaterias = new ArrayList<>();
+        this.listaAlumnos = new ArrayList<>();
     }
 
     public static Universidad getInstancia(String nombre) {
@@ -43,7 +46,11 @@ public class Universidad {
         return this.listaMaterias;
     }
 
-    public String getNombre() {
-        return this.nombre;
+    public void agregarAlumno(Alumno alumno) {
+        this.listaAlumnos.add(alumno);
+    }
+
+    public List<Alumno> getListaAlumnos() {
+        return this.listaAlumnos;
     }
 }

@@ -99,7 +99,7 @@ public class MainFrame extends JFrame {
                 } else if ("materia".equalsIgnoreCase(nombre)){
                     panelCentro.add(new VerMateria(MainFrame.this),BorderLayout.CENTER);
                 } else if ("alumno".equalsIgnoreCase(nombre)){
-                    panelCentro.add(new VerAlumno(),BorderLayout.CENTER);
+                    panelCentro.add(new VerAlumno(MainFrame.this),BorderLayout.CENTER);
                 }
                 panelCentro.revalidate();
                 panelCentro.repaint();

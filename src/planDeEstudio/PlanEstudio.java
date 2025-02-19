@@ -29,7 +29,7 @@ public class PlanEstudio {
         }
     }
 
-    public void inscribirAlumnoMateria(Alumno alumno, Materia materia) {
+    public boolean inscribirAlumnoMateria(Alumno alumno, Materia materia) {
         List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
         if (this.getTipoPlan() == 'A') {
             boolean inscripcion = false;
@@ -37,8 +37,17 @@ public class PlanEstudio {
             if (inscripcion) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
+                boolean materiaNueva = alumno.getLibretaAlumno().buscarMateria(nuevaMateriaLibreta);
+                if (materiaNueva){
+                    System.out.println("nueva materia en la libreta: " + nuevaMateriaLibreta.getNombre());
+                } else {
+                    System.out.println("no se agrego nada");
+                }
+
+                return true;
             } else {
                 System.out.println("El alumno no puede inscribirse a la materia: " + materia);
+                return false;
             }
         } else if (this.getTipoPlan() == 'B') {
             boolean inscripcion = false;
@@ -46,8 +55,10 @@ public class PlanEstudio {
             if (inscripcion) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
+                return true;
             } else {
                 System.out.println("El alumno no puede inscribirse a la materia: " + materia);
+                return false;
             }
         } else if (this.getTipoPlan() == 'C') {
             boolean verificarCorrelativa = false;
@@ -57,8 +68,10 @@ public class PlanEstudio {
             if (verificarCorrelativa && verificarMateriaCuatrimestre) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
+                return true;
             } else {
                 System.out.println("El alumno no puede inscribirse a la materia: " + materia);
+                return false;
             }
         } else if (this.getTipoPlan() == 'D') {
             boolean verificarCorrelativa = false;
@@ -68,8 +81,10 @@ public class PlanEstudio {
             if (verificarCorrelativa && verificarMateriaCuatrimestre) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
+                return true;
             } else {
                 System.out.println("El alumno no puede inscribirse a la materia: " + materia);
+                return false;
             }
         } else if (this.getTipoPlan() == 'E') {
             boolean verificarCorrelativa = false;
@@ -79,16 +94,19 @@ public class PlanEstudio {
             if (verificarCorrelativa && verificarMateriaCuatrimestre) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
+                return true;
             } else {
                 System.out.println("El alumno no puede inscribirse a la materia: " + materia);
+                return false;
             }
         }
+        return false;
     }
 
 
     private boolean correlativasRegular (Alumno alumno, Materia materia){
         List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
-        if( correlativasDirectas == null) {
+        if( correlativasDirectas == null || correlativasDirectas.isEmpty()) {
             return true;
         } else {
             for (Nodo correlativa : correlativasDirectas) {
@@ -104,7 +122,7 @@ public class PlanEstudio {
 
     private boolean correlativasAprobadas (Alumno alumno, Materia materia){
         List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
-        if( correlativasDirectas == null) {
+        if( correlativasDirectas == null || correlativasDirectas.isEmpty()) {
             return true;
         } else {
             for (Nodo correlativa : correlativasDirectas) {

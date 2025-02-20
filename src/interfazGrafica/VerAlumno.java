@@ -12,10 +12,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.swing.JOptionPane;
 
 public class VerAlumno extends JPanel {
@@ -32,6 +30,8 @@ public class VerAlumno extends JPanel {
     private List<Carrera> listaTodasCarreras;
     private List<Materia> listaTodasMaterias;
     private ArrayList<MateriaLibreta> listaTodasMateriasLibreta;
+    private JLabel labelFinalizacion;
+    private JPanel panelFinalizacion;
 
 
     public VerAlumno(MainFrame mainFrame){
@@ -94,7 +94,7 @@ public class VerAlumno extends JPanel {
         panelInfoAlumno.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JLabel labelAlumno = new JLabel("Nombre y Apellido");
-        labelAlumno.setFont(new Font("Arial", Font.BOLD, 16));
+        labelAlumno.setFont(new Font("Arial", Font.PLAIN, 14));
         labelAlumno.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel labelDni = new JLabel("DNI:");
@@ -203,6 +203,25 @@ public class VerAlumno extends JPanel {
         modeloMateria = new DefaultListModel<>();
         listaMaterias = new JList<>(modeloMateria);
         listaMaterias.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        listaMaterias.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value,
+                                                          int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                Font fontNormal = new Font("Arial", Font.PLAIN, 14);
+                Font fontNegrita = new Font("Arial", Font.BOLD, 14);
+
+                if (value.toString().startsWith("Cuatrimestre")) {
+                    label.setFont(fontNegrita);
+                } else {
+                    label.setFont(fontNormal);
+                }
+                return label;
+            }
+        });
+
         panelMateria.add(new JScrollPane(listaMaterias), BorderLayout.CENTER);
         tabbedPane.addTab("Inscripcion Materia", panelMateria);
 
@@ -210,50 +229,67 @@ public class VerAlumno extends JPanel {
         btnInscribirMateria.setFont(new Font("Arial", Font.BOLD, 14));
 
         btnInscribirMateria.addActionListener(e -> {
-                    String materiaSeleccionada = listaMaterias.getSelectedValue();
-                    System.out.println("Materia seleccionada: " + materiaSeleccionada);
-                    if (materiaSeleccionada == null) {
-                        JOptionPane.showMessageDialog(this, "Por favor, seleccione una materia para inscribirse.", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        return;
-                    }
+            String materiaSeleccionada = listaMaterias.getSelectedValue();
+            System.out.println("Materia seleccionada: " + materiaSeleccionada);
+            if (materiaSeleccionada == null) {
+                JOptionPane.showMessageDialog(this, "Por favor, seleccione una materia para inscribirse.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            final String materiaLimpia = materiaSeleccionada.startsWith(" - ")
+                    ? materiaSeleccionada.substring(3).trim()
+                    : materiaSeleccionada;
 
-                    Materia materia = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
-                            .getListaMaterias()
-                            .stream()
-                            .filter(m -> m.getNombre().equals(materiaSeleccionada))
-                            .findFirst()
-                            .orElse(null);
+            Materia materia = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
+                    .getListaMaterias()
+                    .stream()
+                    .filter(m -> m.getNombre().equals(materiaLimpia))
+                    .findFirst()
+                    .orElse(null);
 
-                    if (materia == null) {
-                        JOptionPane.showMessageDialog(this, "Materia no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
+            if (materia == null) {
+                JOptionPane.showMessageDialog(this, "Materia no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                    boolean encontrada = false;
-                    List<MateriaLibreta> listaML = alumnoSeleccionado.getLibretaAlumno().getLibreta();
-                    for (MateriaLibreta ml : listaML) {
-                        if (materia.getNombre().trim().equalsIgnoreCase(ml.getNombre().trim())) {
-                            encontrada = true;
-                            if ("Aprobada".equalsIgnoreCase(ml.getEstado())) {
-                                JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia ya se encuentra aprobada.", "Error", JOptionPane.ERROR_MESSAGE);
-                            } else if ("Regular".equalsIgnoreCase(ml.getEstado())) {
-                                JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia se encuentra en estado Regular.", "Error", JOptionPane.ERROR_MESSAGE);
-                            }
-                            break;
-                        }
+            boolean encontrada = false;
+            List<MateriaLibreta> listaML = alumnoSeleccionado.getLibretaAlumno().getLibreta();
+            for (MateriaLibreta ml : listaML) {
+                if (materia.getNombre().trim().equalsIgnoreCase(ml.getNombre().trim())) {
+                    encontrada = true;
+                    if ("Aprobada".equalsIgnoreCase(ml.getEstado())) {
+                        JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia ya se encuentra aprobada.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else if ("Regular".equalsIgnoreCase(ml.getEstado())) {
+                        JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia se encuentra en estado Regular.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else if ("Cursando".equalsIgnoreCase(ml.getEstado())) {
+                        JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia se encuentra en estado Cursando.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    if (!encontrada) {
-                        boolean inscripcion = carreraSeleccionada.getPlanEstudio().inscribirAlumnoMateria(alumnoSeleccionado, materia);
-                        if(inscripcion){
-                            JOptionPane.showMessageDialog(this, "Se inscribió a " +materiaSeleccionada +".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            actualizarModeloLibreta("");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "El alumno no se puede isncribir a " + materiaSeleccionada + ".", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
+                    break;
+                }
+            }
+            if (!encontrada) {
+                boolean inscripcion = carreraSeleccionada.getPlanEstudio().inscribirAlumnoMateria(alumnoSeleccionado, materia);
+                if(inscripcion){
+                    JOptionPane.showMessageDialog(this, "Se inscribió a " +materiaSeleccionada.substring(3).trim() +".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    actualizarModeloLibreta("");
+                    actualizarEstadoFinalizacion();
+                } else {
+                    JOptionPane.showMessageDialog(this, "El alumno no se puede isncribir a " + materiaSeleccionada.substring(3).trim() + ".", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         panelMateria.add(btnInscribirMateria, BorderLayout.SOUTH);
+
+        // Pestaña 4: Estado de finalización de cursada
+        panelFinalizacion = new JPanel(new BorderLayout());
+        panelFinalizacion.setBackground(Color.white);
+        labelFinalizacion = new JLabel("Estado: No disponible", SwingConstants.CENTER);
+        labelFinalizacion.setFont(new Font("Arial", Font.BOLD, 16));
+
+
+        panelFinalizacion.add(labelFinalizacion, BorderLayout.NORTH);
+        tabbedPane.addTab("Finalización", panelFinalizacion);
+
 
         panelInfoAlumno.add(labelAlumno);
         panelInfoAlumno.add(Box.createVerticalStrut(10));
@@ -324,6 +360,7 @@ public class VerAlumno extends JPanel {
                     actualizarModeloCarreras("");
                     actualizarModeloMaterias("");
                     actualizarModeloLibreta("");
+                    actualizarEstadoFinalizacion();
                 }
             }
         });
@@ -367,9 +404,20 @@ public class VerAlumno extends JPanel {
 
     private void actualizarModeloMaterias(String filtro) {
         modeloMateria.clear();
+        Map<Integer, List<Materia>> materiasPorCuatrimestre = new TreeMap<>();
+
         for (Materia materia : listaTodasMaterias) {
             if (materia.getNombre().toLowerCase().contains(filtro)) {
-                modeloMateria.addElement(materia.getNombre());
+                int cuatrimestre = materia.getCuatrimestre();
+                materiasPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
+                materiasPorCuatrimestre.get(cuatrimestre).add(materia);
+            }
+        }
+
+        for (Map.Entry<Integer, List<Materia>> entry : materiasPorCuatrimestre.entrySet()) {
+            modeloMateria.addElement("Cuatrimestre " + entry.getKey() + ":");
+            for (Materia m : entry.getValue()) {
+                modeloMateria.addElement(" - " + m.getNombre());
             }
         }
     }
@@ -391,6 +439,87 @@ public class VerAlumno extends JPanel {
                 modeloLibreta.addElement(" - " + ml.getNombre() + ": " + ml.getEstado());
             }
         }
+    }
+
+    private void actualizarEstadoFinalizacion() {
+        if (alumnoSeleccionado == null || carreraSeleccionada == null) {
+            labelFinalizacion.setText("Estado: No disponible");
+            return;
+        }
+
+        panelFinalizacion.removeAll();
+        panelFinalizacion.add(labelFinalizacion, BorderLayout.NORTH);
+
+        if (alumnoSeleccionado.getLibretaAlumno().libretaCompleta(carreraSeleccionada.getPlanEstudio())) {
+            labelFinalizacion.setText("¡Cursada Finalizada!");
+            labelFinalizacion.setForeground(new Color(0, 128, 0));
+        } else {
+            Set<String> materiasAprobadas = new HashSet<>();
+            List<String> materiasFaltantes = new ArrayList<>();
+            ArrayList<MateriaLibreta> materiaLibretaFaltante = new ArrayList<>();
+
+            for (MateriaLibreta ml : listaTodasMateriasLibreta) {
+                materiasAprobadas.add(ml.getNombre().toLowerCase());
+                if(ml.getEstado().equalsIgnoreCase("cursando") || ml.getEstado().equalsIgnoreCase("regular")){
+                    materiaLibretaFaltante.add(ml);
+                }
+            }
+            for (Materia m : listaTodasMaterias) {
+                if (!materiasAprobadas.contains(m.getNombre().toLowerCase())) {
+                    materiasFaltantes.add(m.getNombre());
+                }
+            }
+
+            Map<Integer, List<Materia>> materiasFaltantesPorCuatrimestre = new TreeMap<>();
+            for (Materia m : listaTodasMaterias) {
+                if (!materiasAprobadas.contains(m.getNombre().toLowerCase())) {
+                    int cuatrimestre = m.getCuatrimestre();
+                    materiasFaltantesPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
+                    materiasFaltantesPorCuatrimestre.get(cuatrimestre).add(m);
+                }
+            }
+
+            DefaultListModel<String> modeloFaltantes = new DefaultListModel<>();
+            for (Map.Entry<Integer, List<Materia>> entry : materiasFaltantesPorCuatrimestre.entrySet()) {
+                modeloFaltantes.addElement("Cuatrimestre " + entry.getKey() + ":");
+                for(MateriaLibreta materiaLibreta : materiaLibretaFaltante){
+                    if(materiaLibreta.getEstado().equalsIgnoreCase("cursando")){
+                        modeloFaltantes.addElement(" - " + materiaLibreta.getNombre() + ": Cursando");
+                    } else if(materiaLibreta.getEstado().equalsIgnoreCase("regular")){
+                        modeloFaltantes.addElement(" - " + materiaLibreta.getNombre() + ": Regular");
+                    }
+                }
+                for (Materia m : entry.getValue()) {
+                    modeloFaltantes.addElement(" - " + m.getNombre() + ": No cursada");
+                }
+            }
+
+            labelFinalizacion.setText("Cursada en progreso - materias faltantes: ");
+            labelFinalizacion.setForeground(new Color(30, 31, 34));
+
+            JList<String> listaFaltantes = new JList<>(modeloFaltantes);
+            listaFaltantes.setFont(new Font("Arial", Font.PLAIN, 14));
+            listaFaltantes.setCellRenderer(new DefaultListCellRenderer() {
+                @Override
+                public Component getListCellRendererComponent(JList<?> list, Object value,
+                                                              int index, boolean isSelected, boolean cellHasFocus) {
+                    JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    Font fontNormal = new Font("Arial", Font.PLAIN, 14);
+                    Font fontNegrita = new Font("Arial", Font.BOLD, 14);
+                    if (value.toString().startsWith("Cuatrimestre")) {
+                        label.setFont(fontNegrita);
+                    } else {
+                        label.setFont(fontNormal);
+                    }
+                    return label;
+                }
+            });
+            JScrollPane scrollPane = new JScrollPane(listaFaltantes);
+            panelFinalizacion.add(scrollPane, BorderLayout.CENTER);
+        }
+
+        panelFinalizacion.revalidate();
+        panelFinalizacion.repaint();
     }
 
 }

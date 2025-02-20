@@ -28,14 +28,14 @@ public class Alumno {
         this.getLibretaAlumno().completarLibreta(materia);
     }
 
-    public void terminoCarrera(Alumno alumno, PlanEstudio plan){
+    public boolean terminoCarrera(Alumno alumno, PlanEstudio plan){
         if (this.getLibretaAlumno().libretaCompleta(plan)){
             System.out.println("El alumno " + this.getNombre() + " " + this.getApellido() + " termino la carrera");
+            return true;
         } else {
             System.out.println("El alumno " + this.getNombre() + " " + this.getApellido() + " no termino la carrera");
+            return false;
         }
-
-
     }
 
     //Setters y getters

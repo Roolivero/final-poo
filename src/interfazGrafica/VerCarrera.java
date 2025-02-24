@@ -40,10 +40,11 @@ public class VerCarrera extends JPanel {
 
     public VerCarrera(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-
+        setBackground(new Color(229, 224, 243));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotonVolver.setBackground(new Color(229, 224, 243));
         JButton botonVolver = new JButton("Volver");
         mainFrame.personalizarBoton(botonVolver,new Color(166, 144, 246),new Color(10, 2, 43),14);
         botonVolver.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -54,6 +55,7 @@ public class VerCarrera extends JPanel {
             }
         });
 
+        panelBotonVolver.setMaximumSize(new Dimension(Integer.MAX_VALUE, botonVolver.getPreferredSize().height));
         panelBotonVolver.add(botonVolver);
         add(panelBotonVolver);
 
@@ -93,32 +95,35 @@ public class VerCarrera extends JPanel {
 
         panelInfoCarrera = new JPanel();
         panelInfoCarrera.setLayout(new BoxLayout(panelInfoCarrera, BoxLayout.Y_AXIS));
+        panelInfoCarrera.setBackground(new Color(229, 224, 243));
         panelInfoCarrera.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        labelNombre = new JLabel("Nombre de la carrera:");
-        labelNombre.setFont(new Font("Arial", Font.BOLD, 16));
+        labelNombre = new JLabel("Nombre de la carrera: ");
+        labelNombre.setFont(new Font("Arial", Font.PLAIN, 14));
         labelNombre.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        labelPlanEstudio = new JLabel("Plan de estudio:");
+        labelPlanEstudio = new JLabel("Plan de estudio: ");
         labelPlanEstudio.setFont(new Font("Arial", Font.PLAIN, 14));
         labelPlanEstudio.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        labelDuracion = new JLabel("Duración:");
+        labelDuracion = new JLabel("Duración: ");
         labelDuracion.setFont(new Font("Arial", Font.PLAIN, 14));
         labelDuracion.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        labelCantidadAlumnos = new JLabel("Cantidad de alumnos:");
+        labelCantidadAlumnos = new JLabel("Cantidad de alumnos: ");
         labelCantidadAlumnos.setFont(new Font("Arial", Font.PLAIN, 14));
         labelCantidadAlumnos.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        labelCantidadMaterias = new JLabel("Cantidad de materias:");
+        labelCantidadMaterias = new JLabel("Cantidad de materias: ");
         labelCantidadMaterias.setFont(new Font("Arial", Font.PLAIN, 14));
         labelCantidadMaterias.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         tabbedPane = new JTabbedPane();
 
         // Pestaña 1: Alumnos inscriptos
         JPanel panelAlumnos = new JPanel(new BorderLayout());
+        panelAlumnos.setBackground(new Color(229, 224, 243));
         modeloAlumnos = new DefaultListModel<>();
         listaAlumnos = new JList<>(modeloAlumnos);
         listaAlumnos.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -242,6 +247,8 @@ public class VerCarrera extends JPanel {
                 if (carrera != null) {
                     panelInfoCarrera.setVisible(true);
                     tabbedPane.setVisible(true);
+                    panelInfoCarrera.revalidate();
+                    panelInfoCarrera.repaint();
 
                     labelNombre.setText("Carrera: " + carrera.getNombre());
                     labelPlanEstudio.setText("Plan de estudio: " + carrera.getPlanEstudio().getTipoPlan());

@@ -8,6 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.stream.Stream;
 
+
+
+
 public class MainFrame extends JFrame {
 
     private JPanel mainPanel;
@@ -25,7 +28,7 @@ public class MainFrame extends JFrame {
 
         JLabel labelTitulo = new JLabel("Universidad Nacional Tierra del Fuego", SwingConstants.CENTER);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        mainPanel.setBackground(new Color(114, 83, 151, 197));
+        mainPanel.setBackground(new Color(148, 97, 191));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
 
         panelBotones = new JPanel();
@@ -44,7 +47,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(panelBotones, BorderLayout.WEST);
 
         panelCentro = new JPanel();
-        panelCentro.setBackground(new Color(219, 202, 243));
+        panelCentro.setBackground(new Color(229, 224, 243));
         mainPanel.add(panelCentro, BorderLayout.CENTER);
 
 
@@ -66,7 +69,6 @@ public class MainFrame extends JFrame {
             }
         });
 
-        // Configurar el content pane del JFrame
         setContentPane(mainPanel);
         setVisible(true);
     }
@@ -118,7 +120,7 @@ public class MainFrame extends JFrame {
                 } else if ("materia".equalsIgnoreCase(nombre)){
                     panelCentro.add(new CrearMateria(MainFrame.this),BorderLayout.CENTER);
                 } else if ("alumno".equalsIgnoreCase(nombre)){
-                    panelCentro.add(new CrearAlumno(),BorderLayout.CENTER);
+                    panelCentro.add(new CrearAlumno(MainFrame.this),BorderLayout.CENTER);
                 }
                 panelCentro.revalidate();
                 panelCentro.repaint();

@@ -21,14 +21,22 @@ public class PlanEstudio {
 
 
     //Metodos
-    public void grafoMaterias(Materia materia, Materia correlativa){
-        Nodo nodoMateria = correlativas.agregarMateria(materia);
-        if (correlativa != null){
-            Nodo nodoCorrelativa = correlativas.agregarMateria(correlativa);
-            correlativas.agregarArista(nodoMateria,nodoCorrelativa);
+    public void grafoMaterias(Materia materia, Materia correlativa) {
+        if (materia == null) {
+            throw new IllegalArgumentException("La materia principal no puede ser nula");
+        }
+        Nodo nodoMateria = correlativas.obtenernodo(materia);
+        if (nodoMateria == null) {
+            nodoMateria = correlativas.agregarMateria(materia);
+        }
+        if (correlativa != null) {
+            Nodo nodoCorrelativa = correlativas.obtenernodo(correlativa);
+            if (nodoCorrelativa == null) {
+                nodoCorrelativa = correlativas.agregarMateria(correlativa);
+            }
+            correlativas.agregarArista(nodoMateria, nodoCorrelativa);
         }
     }
-
     public boolean inscribirAlumnoMateria(Alumno alumno, Materia materia) {
         List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
         if (this.getTipoPlan() == 'A') {
@@ -104,54 +112,73 @@ public class PlanEstudio {
     }
 
 
-    private boolean correlativasRegular (Alumno alumno, Materia materia){
+    private boolean correlativasRegular(Alumno alumno, Materia materia) {
         List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
-        if( correlativasDirectas == null || correlativasDirectas.isEmpty()) {
+        if(correlativasDirectas == null || correlativasDirectas.isEmpty()) {
+            return true;
+        }
+        for (Nodo correlativa : correlativasDirectas) {
+            boolean encontrada = false;
+            for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
+                if (correlativa.getmateria().getNombre().equals(materiaLibreta.getNombre()) &&
+                        "Regular".equals(materiaLibreta.getEstado())) {
+                    encontrada = true;
+                    break;
+                }
+            }
+            if (!encontrada) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean correlativasAprobadas (Alumno alumno, Materia materia) {
+        List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
+        if (correlativasDirectas == null || correlativasDirectas.isEmpty()) {
             return true;
         } else {
             for (Nodo correlativa : correlativasDirectas) {
+                boolean encontrada = false;
                 for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
-                    if (correlativa.getmateria().getNombre().equals(materiaLibreta.getNombre()) && ("Regular".equals(materiaLibreta.getEstado()))) {
-                        return true;
+                    if (correlativa.getmateria().getNombre().equals(materiaLibreta.getNombre()) &&
+                            "Aprobada".equals(materiaLibreta.getEstado())) {
+                        encontrada = true;
+                        break;
                     }
                 }
+                if (!encontrada) {
+                    return false;
+                }
             }
-            return false;
-        }
-    }
-
-    private boolean correlativasAprobadas (Alumno alumno, Materia materia){
-        List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
-        if( correlativasDirectas == null || correlativasDirectas.isEmpty()) {
             return true;
-        } else {
-            for (Nodo correlativa : correlativasDirectas) {
-                for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
-                    if (correlativa.getmateria().getNombre().equals(materiaLibreta.getNombre()) && ("Aprobada".equals(materiaLibreta.getEstado()))) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
     }
 
-    private boolean finalesAprobados (Alumno alumno, Materia materia,int cuatri){
+    private boolean finalesAprobados(Alumno alumno, Materia materia, int cuatri) {
         int cuatrimestre = materia.getCuatrimestre();
         List<Nodo> materiasCuatrimestre = this.getGrafo().materiasPorCuatrimestre(cuatrimestre, cuatri);
-        if( materiasCuatrimestre == null) {
+
+        if(materiasCuatrimestre == null || materiasCuatrimestre.isEmpty()) {
             return true;
-        } else {
-            for (Nodo materiaGrafo : materiasCuatrimestre) {
-                for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
-                    if((materiaGrafo.getmateria().getNombre().equals(materiaLibreta.getNombre())) && ("Aprobada".equals(materiaLibreta.getEstado()))){
-                        return true;
-                    }
+        }
+
+        for (Nodo materiaGrafo : materiasCuatrimestre) {
+            boolean encontrada = false;
+            for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
+                if(materiaGrafo.getmateria().getNombre().equals(materiaLibreta.getNombre()) &&
+                        "Aprobada".equals(materiaLibreta.getEstado())) {
+                    encontrada = true;
+                    break;
                 }
             }
-            return false;
+            if (!encontrada) {
+                return false;
+            }
         }
+        return true;
     }
+
     //Setters y getters
     public void setTipoPlan(char tipoPlan){this.tipoPlan = tipoPlan;}
 

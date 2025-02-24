@@ -21,12 +21,14 @@ public class CrearCarrera extends JPanel {
     public CrearCarrera(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
+        setBackground(new Color(229, 224, 243));
         setLayout(new BorderLayout());
 
         panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotonVolver.setBackground(new Color(229, 224, 243));
         JButton botonVolver = new JButton("Volver");
         mainFrame.personalizarBoton(botonVolver, new Color(166, 144, 246), new Color(10, 2, 43), 14);
-        //botonVolver.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
 
         botonVolver.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -39,12 +41,15 @@ public class CrearCarrera extends JPanel {
         add(panelBotonVolver, BorderLayout.NORTH);
 
         JPanel panelFormulario = new JPanel();
+        panelFormulario.setBackground(new Color(229, 224, 243));
         panelFormulario.setLayout(new BoxLayout(panelFormulario, BoxLayout.Y_AXIS));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JPanel panelNombre = new JPanel();
+        panelNombre.setBackground(new Color(229, 224, 243));
         panelNombre.setLayout(new BoxLayout(panelNombre, BoxLayout.X_AXIS));
         JLabel labelNombre = new JLabel("Nombre de la carrera:");
+        labelNombre.setFont(new Font("Arial", Font.PLAIN, 16));
         campoNombre = new JTextField(20);
         campoNombre.setPreferredSize(new Dimension(250, 30));
         campoNombre.setMaximumSize(new Dimension(250, 30));
@@ -57,8 +62,10 @@ public class CrearCarrera extends JPanel {
         panelFormulario.add(Box.createVerticalStrut(10));
 
         JPanel panelDuracion = new JPanel();
+        panelDuracion.setBackground(new Color(229, 224, 243));
         panelDuracion.setLayout(new BoxLayout(panelDuracion, BoxLayout.X_AXIS));
         JLabel labelDuracion = new JLabel("Duración (años):");
+        labelDuracion.setFont(new Font("Arial", Font.PLAIN, 16));
         String[] opcionesDuracion = {"1", "2", "3", "4", "5", "6"};
         comboDuracion = new JComboBox<>(opcionesDuracion);
 
@@ -94,8 +101,10 @@ public class CrearCarrera extends JPanel {
 
 
         JPanel panelPlan = new JPanel();
+        panelPlan.setBackground(new Color(229, 224, 243));
         panelPlan.setLayout(new BoxLayout(panelPlan, BoxLayout.X_AXIS));
         JLabel labelPlan = new JLabel("Plan de Estudio:");
+        labelPlan.setFont(new Font("Arial", Font.PLAIN, 16));
         String[] opcionesPlan = {"A", "B", "C", "D", "E"};
         comboPlan = new JComboBox<>(opcionesPlan);
 
@@ -174,11 +183,9 @@ public class CrearCarrera extends JPanel {
         PlanEstudio plan = new PlanEstudio(planEstudioChar);
         Carrera nuevaCarrera = new Carrera(nombre, duracion, plan);
 
-        // Agregar la carrera a la Universidad
         Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
         universidad.agregarCarrera(nuevaCarrera);
 
-        //JOptionPane.showMessageDialog(this, "¡Carrera creada exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         JOptionPane.showMessageDialog(this,
                 "¡Carrera creada exitosamente!\n\n" +
                         "Nombre: " + nombre + "\n" +

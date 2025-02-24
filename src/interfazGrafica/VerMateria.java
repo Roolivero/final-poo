@@ -18,9 +18,11 @@ public class VerMateria extends JPanel {
 
         Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
 
+        setBackground(new Color(229, 224, 243));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotonVolver.setBackground(new Color(229, 224, 243));
         JButton botonVolver = new JButton("Volver");
         mainFrame.personalizarBoton(botonVolver, new Color(166, 144, 246), new Color(10, 2, 43), 14);
         botonVolver.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -31,6 +33,7 @@ public class VerMateria extends JPanel {
             }
         });
 
+        panelBotonVolver.setMaximumSize(new Dimension(Integer.MAX_VALUE, botonVolver.getPreferredSize().height));
         panelBotonVolver.add(botonVolver);
         add(panelBotonVolver);
 
@@ -69,6 +72,7 @@ public class VerMateria extends JPanel {
         comboMaterias.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel panelInfoMaterias = new JPanel();
+        panelInfoMaterias.setBackground(new Color(229, 224, 243));
         panelInfoMaterias.setLayout(new BoxLayout(panelInfoMaterias, BoxLayout.Y_AXIS));
         panelInfoMaterias.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         Dimension maxSize = new Dimension(650, panelInfoMaterias.getMaximumSize().height);
@@ -135,7 +139,7 @@ public class VerMateria extends JPanel {
                     modeloCarreras.clear();
                     for(Carrera carrera : universidad.getListaCarreras()){
                         if (carrera.getMaterias().contains(materia)){
-                           modeloCarreras.addElement("*" + carrera.getNombre() + "\n");
+                           modeloCarreras.addElement("- " + carrera.getNombre() + "\n");
                         }
                     }
 

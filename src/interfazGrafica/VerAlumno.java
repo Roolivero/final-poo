@@ -37,9 +37,11 @@ public class VerAlumno extends JPanel {
     public VerAlumno(MainFrame mainFrame){
         this.mainFrame = mainFrame;
 
+        setBackground(new Color(229, 224, 243));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotonVolver.setBackground(new Color(229, 224, 243));
         JButton botonVolver = new JButton("Volver");
         mainFrame.personalizarBoton(botonVolver,new Color(166, 144, 246),new Color(10, 2, 43),14);
         botonVolver.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -49,6 +51,8 @@ public class VerAlumno extends JPanel {
                 mainFrame.mostrarPanel("alumno");
             }
         });
+
+        panelBotonVolver.setMaximumSize(new Dimension(Integer.MAX_VALUE, botonVolver.getPreferredSize().height));
 
         panelBotonVolver.add(botonVolver);
         add(panelBotonVolver);
@@ -90,6 +94,7 @@ public class VerAlumno extends JPanel {
         comboAlumnos.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel panelInfoAlumno = new JPanel();
+        panelInfoAlumno.setBackground(new Color(229, 224, 243));
         panelInfoAlumno.setLayout(new BoxLayout(panelInfoAlumno, BoxLayout.Y_AXIS));
         panelInfoAlumno.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -139,7 +144,6 @@ public class VerAlumno extends JPanel {
         tabbedPane.addTab("Libreta Universitaria", panelLibreta);
 
         //Pestaña 2: Inscripcion carrera
-
         JPanel panelInscripcionCarrera = new JPanel(new BorderLayout());
         JTextField searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(250, 30));
@@ -154,39 +158,39 @@ public class VerAlumno extends JPanel {
         btnInscribirCarrera.setFont(new Font("Arial", Font.BOLD, 14));
 
         btnInscribirCarrera.addActionListener(e -> {
-            String carreraSeleccionada = listaCarreras.getSelectedValue();
-            if (carreraSeleccionada == null) {
+            String carreraStr = listaCarreras.getSelectedValue();
+            if (carreraStr == null) {
                 JOptionPane.showMessageDialog(this, "Por favor, seleccione una carrera para inscribirse.", "Información", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             Carrera carrera = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
                     .getListaCarreras()
                     .stream()
-                    .filter(c -> c.getNombre().equals(carreraSeleccionada))
+                    .filter(c -> c.getNombre().equals(carreraStr))
                     .findFirst()
                     .orElse(null);
             if (carrera == null) {
                 JOptionPane.showMessageDialog(this, "Carrera no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            listaTodasCarreras = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaCarreras();
 
-            Boolean estaInscripto = false;
+            boolean estaInscripto = listaTodasCarreras.stream()
+                    .anyMatch(c -> c.getAlumnosInscriptos().contains(alumnoSeleccionado));
 
-            for(Carrera c: listaTodasCarreras){
-                if (c.getAlumnosInscriptos().contains(alumnoSeleccionado)){
-                    estaInscripto = true;
-                }
-            }
-
-            if(carrera.getAlumnosInscriptos().contains(alumnoSeleccionado)){
-                JOptionPane.showMessageDialog(this, "El alumno ya se encuentra inscripto en " +carrera.getNombre() + ".", "Información", JOptionPane.INFORMATION_MESSAGE);
-            } else if (estaInscripto && !carrera.getAlumnosInscriptos().contains(alumnoSeleccionado)){
+            if (carrera.getAlumnosInscriptos().contains(alumnoSeleccionado)) {
+                JOptionPane.showMessageDialog(this, "El alumno ya se encuentra inscripto en " + carrera.getNombre() + ".", "Información", JOptionPane.INFORMATION_MESSAGE);
+            } else if (estaInscripto && !carrera.getAlumnosInscriptos().contains(alumnoSeleccionado)) {
                 JOptionPane.showMessageDialog(this, "El alumno ya se encuentra inscripto en otra carrera.", "Información", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 carrera.getAlumnosInscriptos().add(alumnoSeleccionado);
-                JOptionPane.showMessageDialog(this, "Inscripción realizada con éxito a la "+ carrera.getNombre() + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Inscripción realizada con éxito a la " + carrera.getNombre() + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
+
+                carreraSeleccionada = carrera;
+                listaTodasMaterias = carrera.getMaterias();
+
+                labelCarrera.setText("Carrera: " + carrera.getNombre());
+                actualizarModeloMaterias("");
             }
         });
 
@@ -239,8 +243,7 @@ public class VerAlumno extends JPanel {
                     ? materiaSeleccionada.substring(3).trim()
                     : materiaSeleccionada;
 
-            Materia materia = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
-                    .getListaMaterias()
+            Materia materia = carreraSeleccionada.getMaterias()
                     .stream()
                     .filter(m -> m.getNombre().equals(materiaLimpia))
                     .findFirst()
@@ -257,7 +260,7 @@ public class VerAlumno extends JPanel {
                 if (materia.getNombre().trim().equalsIgnoreCase(ml.getNombre().trim())) {
                     encontrada = true;
                     if ("Aprobada".equalsIgnoreCase(ml.getEstado())) {
-                        JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia ya se encuentra aprobada.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia ya se encuentra Aprobada.", "Error", JOptionPane.ERROR_MESSAGE);
                     } else if ("Regular".equalsIgnoreCase(ml.getEstado())) {
                         JOptionPane.showMessageDialog(this, "Está inscripto. Esta materia se encuentra en estado Regular.", "Error", JOptionPane.ERROR_MESSAGE);
                     } else if ("Cursando".equalsIgnoreCase(ml.getEstado())) {
@@ -273,10 +276,11 @@ public class VerAlumno extends JPanel {
                     actualizarModeloLibreta("");
                     actualizarEstadoFinalizacion();
                 } else {
-                    JOptionPane.showMessageDialog(this, "El alumno no se puede isncribir a " + materiaSeleccionada.substring(3).trim() + ".", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "El alumno no se puede inscribir a " + materiaSeleccionada.substring(3).trim() + ".", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
 
         panelMateria.add(btnInscribirMateria, BorderLayout.SOUTH);
 
@@ -321,7 +325,6 @@ public class VerAlumno extends JPanel {
                         .orElse(null);
                 if (alumno != null) {
                     listaTodasCarreras = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaCarreras();
-                    listaTodasMaterias = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
                     listaTodasMateriasLibreta = alumno.getLibretaAlumno().getLibreta();
 
                     alumnoSeleccionado = alumno;
@@ -338,6 +341,7 @@ public class VerAlumno extends JPanel {
                         if (c.getAlumnosInscriptos().contains(alumno)){
                             nombreCarrera = c.getNombre();
                             carreraSeleccionada = c;
+                            listaTodasMaterias = c.getMaterias();
                         }
                     }
 
@@ -406,19 +410,24 @@ public class VerAlumno extends JPanel {
         modeloMateria.clear();
         Map<Integer, List<Materia>> materiasPorCuatrimestre = new TreeMap<>();
 
-        for (Materia materia : listaTodasMaterias) {
-            if (materia.getNombre().toLowerCase().contains(filtro)) {
-                int cuatrimestre = materia.getCuatrimestre();
-                materiasPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
-                materiasPorCuatrimestre.get(cuatrimestre).add(materia);
+        if (carreraSeleccionada != null) {
+            for (Materia materia : carreraSeleccionada.getMaterias()) {
+                if (materia.getNombre().toLowerCase().contains(filtro)) {
+                    int cuatrimestre = materia.getCuatrimestre();
+                    materiasPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
+                    materiasPorCuatrimestre.get(cuatrimestre).add(materia);
+                }
             }
         }
-
         for (Map.Entry<Integer, List<Materia>> entry : materiasPorCuatrimestre.entrySet()) {
             modeloMateria.addElement("Cuatrimestre " + entry.getKey() + ":");
             for (Materia m : entry.getValue()) {
                 modeloMateria.addElement(" - " + m.getNombre());
             }
+        }
+
+        if (modeloMateria.isEmpty()) {
+            modeloMateria.addElement("No hay datos para mostrar");
         }
     }
 
@@ -439,6 +448,10 @@ public class VerAlumno extends JPanel {
                 modeloLibreta.addElement(" - " + ml.getNombre() + ": " + ml.getEstado());
             }
         }
+
+        if (modeloLibreta.isEmpty()) {
+            modeloLibreta.addElement("No hay datos para mostrar");
+        }
     }
 
     private void actualizarEstadoFinalizacion() {
@@ -454,47 +467,30 @@ public class VerAlumno extends JPanel {
             labelFinalizacion.setText("¡Cursada Finalizada!");
             labelFinalizacion.setForeground(new Color(0, 128, 0));
         } else {
-            Set<String> materiasAprobadas = new HashSet<>();
-            List<String> materiasFaltantes = new ArrayList<>();
-            ArrayList<MateriaLibreta> materiaLibretaFaltante = new ArrayList<>();
-
-            for (MateriaLibreta ml : listaTodasMateriasLibreta) {
-                materiasAprobadas.add(ml.getNombre().toLowerCase());
-                if(ml.getEstado().equalsIgnoreCase("cursando") || ml.getEstado().equalsIgnoreCase("regular")){
-                    materiaLibretaFaltante.add(ml);
-                }
-            }
+            Map<Integer, List<String>> materiasPorCuatrimestre = new TreeMap<>();
             for (Materia m : listaTodasMaterias) {
-                if (!materiasAprobadas.contains(m.getNombre().toLowerCase())) {
-                    materiasFaltantes.add(m.getNombre());
-                }
-            }
+                String estado = "No cursada";
 
-            Map<Integer, List<Materia>> materiasFaltantesPorCuatrimestre = new TreeMap<>();
-            for (Materia m : listaTodasMaterias) {
-                if (!materiasAprobadas.contains(m.getNombre().toLowerCase())) {
-                    int cuatrimestre = m.getCuatrimestre();
-                    materiasFaltantesPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
-                    materiasFaltantesPorCuatrimestre.get(cuatrimestre).add(m);
+                for (MateriaLibreta ml : listaTodasMateriasLibreta) {
+                    if (m.getNombre().trim().equalsIgnoreCase(ml.getNombre().trim())) {
+                        estado = ml.getEstado();
+                        break;
+                    }
                 }
+                int cuatrimestre = m.getCuatrimestre();
+                materiasPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
+                materiasPorCuatrimestre.get(cuatrimestre).add(" - " + m.getNombre() + ": " + estado);
             }
 
             DefaultListModel<String> modeloFaltantes = new DefaultListModel<>();
-            for (Map.Entry<Integer, List<Materia>> entry : materiasFaltantesPorCuatrimestre.entrySet()) {
+            for (Map.Entry<Integer, List<String>> entry : materiasPorCuatrimestre.entrySet()) {
                 modeloFaltantes.addElement("Cuatrimestre " + entry.getKey() + ":");
-                for(MateriaLibreta materiaLibreta : materiaLibretaFaltante){
-                    if(materiaLibreta.getEstado().equalsIgnoreCase("cursando")){
-                        modeloFaltantes.addElement(" - " + materiaLibreta.getNombre() + ": Cursando");
-                    } else if(materiaLibreta.getEstado().equalsIgnoreCase("regular")){
-                        modeloFaltantes.addElement(" - " + materiaLibreta.getNombre() + ": Regular");
-                    }
-                }
-                for (Materia m : entry.getValue()) {
-                    modeloFaltantes.addElement(" - " + m.getNombre() + ": No cursada");
+                for (String s : entry.getValue()) {
+                    modeloFaltantes.addElement(s);
                 }
             }
 
-            labelFinalizacion.setText("Cursada en progreso - materias faltantes: ");
+            labelFinalizacion.setText("Cursada en progreso:");
             labelFinalizacion.setForeground(new Color(30, 31, 34));
 
             JList<String> listaFaltantes = new JList<>(modeloFaltantes);
@@ -521,5 +517,6 @@ public class VerAlumno extends JPanel {
         panelFinalizacion.revalidate();
         panelFinalizacion.repaint();
     }
+
 
 }

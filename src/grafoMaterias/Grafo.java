@@ -16,10 +16,15 @@ public class Grafo {
 
     //Metodos
     public Nodo agregarMateria (Materia materia){
+        Nodo nodoExistente = obtenernodo(materia);
+        if (nodoExistente != null) {
+            return nodoExistente;
+        }
         Nodo nodoNuevo = new Nodo(materia);
         this.nodoMateria.add(nodoNuevo);
         return nodoNuevo;
     }
+
     public void agregarArista(Nodo materia1, Nodo materia2){
         materia1.agregarArista(materia2);
     }
@@ -31,8 +36,8 @@ public class Grafo {
     }
 
     public Nodo obtenernodo(Materia materia){
-        for (Nodo n : this.getNodoMateria()){
-            if(n.getmateria() == materia){
+        for (Nodo n : this.nodoMateria) {
+            if(n.getmateria() != null && n.getmateria().equals(materia)) {
                 return n;
             }
         }

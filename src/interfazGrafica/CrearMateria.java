@@ -21,6 +21,7 @@ public class CrearMateria extends JPanel {
 
         Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
 
+        setBackground(new Color(229, 224, 243));
         setLayout(new BorderLayout());
 
         panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -34,17 +35,20 @@ public class CrearMateria extends JPanel {
         });
 
         panelBotonVolver.add(botonVolver);
+        panelBotonVolver.setBackground(new Color(229, 224, 243));
         add(panelBotonVolver, BorderLayout.NORTH);
 //        revalidate();
 //        repaint();
 
         JPanel panelFormulario = new JPanel();
+        panelFormulario.setBackground(new Color(229, 224, 243));
         panelFormulario.setLayout(new BoxLayout(panelFormulario, BoxLayout.Y_AXIS));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JPanel panelNombre = new JPanel(new FlowLayout(FlowLayout.CENTER));
-       // panelNombre.setLayout(new BoxLayout(panelNombre, BoxLayout.X_AXIS));
+        panelNombre.setBackground(new Color(229, 224, 243));
         JLabel labelNombre = new JLabel("Nombre de la materia:");
+        labelNombre.setFont(new Font("Arial", Font.PLAIN, 16));
         campoNombre = new JTextField(20);
         campoNombre.setPreferredSize(new Dimension(250, 30));
         campoNombre.setMaximumSize(new Dimension(250, 30));
@@ -57,8 +61,9 @@ public class CrearMateria extends JPanel {
         panelFormulario.add(Box.createVerticalStrut(10));
 
         JPanel panelTipo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-       // panelTipo.setLayout(new BoxLayout(panelTipo, BoxLayout.X_AXIS));
+        panelTipo.setBackground(new Color(229, 224, 243));
         JLabel labelTipo = new JLabel("Tipo de materia:");
+        labelTipo.setFont(new Font("Arial", Font.PLAIN, 16));
         String[] opcionesTipo = {"Obligatoria", "Optativa"};
         comboTipo = new JComboBox<>(opcionesTipo);
 
@@ -94,8 +99,9 @@ public class CrearMateria extends JPanel {
 
 
         JPanel panelCuatrimestre = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        //panelCuatrimestre.setLayout(new BoxLayout(panelCuatrimestre, BoxLayout.X_AXIS));
+        panelCuatrimestre.setBackground(new Color(229, 224, 243));
         JLabel labelCuatrimestre = new JLabel("Cuatrimestre:");
+        labelCuatrimestre.setFont(new Font("Arial", Font.PLAIN, 16));
         String[] opcionesPlan = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
         comboCuatrimestre = new JComboBox<>(opcionesPlan);
 

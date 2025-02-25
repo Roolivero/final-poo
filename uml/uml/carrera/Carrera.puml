@@ -1,0 +1,22 @@
+@startuml
+class Carrera {
+    - nombre: String
+    - duracion: int
+    - planEstudio: PlanEstudio
+    - alumnosInscriptos: List<Alumno>
+    - materias: List<Materia>
+
+    + Carrera(nombre: String, duracion: int, planEstudio: PlanEstudio)
+    + inscribirAlumno(alumno: Alumno): void
+    + agregarMaterias(materia: Materia): void
+    + setNombre(nombre: String): void
+    + setDuracion(duracion: int): void
+    + setPlanEstudio(planEstudio: PlanEstudio): void
+    + setAlumnos(alumnosInscriptos: List<Alumno>): void
+    + getNombre(): String
+    + getDuracion(): int
+    + getAlumnosInscriptos(): List<Alumno>
+    + getPlanEstudio(): PlanEstudio
+    + getMaterias(): List<Materia>
+}
+@enduml

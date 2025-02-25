@@ -1,0 +1,43 @@
+@startuml
+
+!include ./alumno/Alumnos.puml
+!include ./carrera/Carrera.puml
+!include ./grafoMaterias/Paquete.puml
+!include ./libretaUniversitaria/Libreta.puml
+!include ./materia/Paquete.puml
+!include ./planDeEstudio/PlanEstudio.puml
+!include ./sistemaUniversitario/SistemaUniversitario.puml
+!include ./universidad/Universidad.puml
+
+Alumno *--> Libreta : Composición
+Alumno ..> MateriaLibreta : Dependencia
+Alumno ..> PlanEstudio : Dependencia
+
+Carrera o--> PlanEstudio : Agregación
+Carrera o--> Alumno : Agregación
+Carrera o--> Materia : Agregación
+
+Grafo ..> Materia : Dependencia
+
+Nodo o--> Materia : Agregación
+
+Libreta *--> MateriaLibreta : Composición
+Libreta ..> Materia : Dependencia
+Libreta ..> PlanEstudio : Dependencia
+
+PlanEstudio *--> Grafo : Composición
+PlanEstudio ..> Materia : Dependencia
+PlanEstudio ..> Alumno : Dependencia
+PlanEstudio ..> MateriaLibreta : Dependencia
+PlanEstudio ..> Nodo : Dependencia
+
+SistemaUniversitario *--> Universidad : Agregación
+SistemaUniversitario --> SistemaUniversitario: Asociación
+
+Universidad *--> Carrera : Agregación
+Universidad *--> Materia : Agregación
+Universidad *--> Alumno : Agregación
+Universidad --> Universidad: Asociación
+
+
+@enduml

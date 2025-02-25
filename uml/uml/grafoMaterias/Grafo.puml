@@ -1,0 +1,19 @@
+@startuml
+class Grafo {
+    - nodoMateria: ArrayList<Nodo>
+    
+    + Grafo()
+    + agregarMateria(materia: Materia): Nodo
+    + agregarArista(materia1: Nodo, materia2: Nodo): void
+    + eliminarArista(materia1: Nodo, materia2: Nodo): void
+    + eliminarnodo(materia: Nodo): void
+    + obtenernodo(materia: Materia): Nodo
+    + listaMaterias(): List<Materia>
+    + materiasPorCuatrimestre(cuatrimestre: int, numero: int): List<Nodo>
+    + correlativasDirectas(materia: Materia): List<Nodo>
+    + predecesores(materia: Materia): List<Nodo>
+    - dfsPredecesores(actual: Nodo, destino: Nodo, predecesores: List<Nodo>): void
+    + print(): void
+    + getNodoMateria(): ArrayList<Nodo>
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+class SistemaUniversitario {
+    - listaUniversidades: List<Universidad>
+    - {static} instancia: SistemaUniversitario
+
+    + SistemaUniversitario()
+    + agregarUniversidad(universidad: Universidad): void
+    + {static} getInstancia(): SistemaUniversitario
+    + getListaUniversidades(): List<Universidad>
+}
+@enduml

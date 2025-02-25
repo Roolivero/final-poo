@@ -1,0 +1,13 @@
+@startuml
+
+!include ./Arista.puml
+!include ./Grafo.puml
+!include ./Nodo.puml
+
+Grafo *--> Nodo : Composición
+Nodo *--> Arista : Composición
+Arista --> Nodo : Asociación
+
+Nodo -- Nodo: Asociación
+
+@enduml

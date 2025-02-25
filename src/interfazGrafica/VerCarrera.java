@@ -2,6 +2,8 @@ package interfazGrafica;
 
 import alumno.Alumno;
 import carrera.Carrera;
+import grafoMaterias.Grafo;
+import grafoMaterias.Nodo;
 import materia.Materia;
 import universidad.Universidad;
 
@@ -36,6 +38,7 @@ public class VerCarrera extends JPanel {
     private DefaultListModel<String> modeloAgregarMaterias;
     private JList<String> listaAgregarMaterias;
     private List<Materia> listaTodasMateriasCompleta;
+    private JTextArea textAreaPlanEstudio;
 
 
     public VerCarrera(MainFrame mainFrame) {
@@ -214,6 +217,16 @@ public class VerCarrera extends JPanel {
         panelAgregarMaterias.add(btnAgregarMateria, BorderLayout.SOUTH);
         tabbedPane.addTab("Agregar Materias", panelAgregarMaterias);
 
+
+        // Pestaña 4: Ver Plan de estudio con las materias y sus correlativas
+        JPanel panelPlanEstudio = new JPanel(new BorderLayout());
+        textAreaPlanEstudio = new JTextArea();
+        textAreaPlanEstudio.setEditable(false);
+        textAreaPlanEstudio.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        panelPlanEstudio.add(new JScrollPane(textAreaPlanEstudio), BorderLayout.CENTER);
+        tabbedPane.addTab("Plan de estudio", panelPlanEstudio);
+
         panelInfoCarrera.add(labelNombre);
         panelInfoCarrera.add(Box.createVerticalStrut(5));
         panelInfoCarrera.add(labelPlanEstudio);
@@ -278,6 +291,10 @@ public class VerCarrera extends JPanel {
                     listaTodasMateriasCompleta = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
                     actualizarModeloAgregarMaterias("");
 
+                    String correlativas = obtenerCorrelativas(carrera.getPlanEstudio().getGrafo());
+                    textAreaPlanEstudio.setText(correlativas);
+
+
                 }
             }
         });
@@ -322,4 +339,25 @@ public class VerCarrera extends JPanel {
         }
     }
 
+    private String obtenerCorrelativas(Grafo grafo) {
+        StringBuilder sb = new StringBuilder();
+        for (Nodo n : grafo.getNodoMateria()) {
+            if (n.getAristas().isEmpty()) {
+                sb.append(n.getmateria()).append(" --> no tiene correlativas\n\n");
+            } else {
+                String mensaje = "";
+                for (int i = 0; i < n.getAristas().size(); i++) {
+                    if (i == 0) {
+                        mensaje += n.getAristas().get(i).getInicio().getmateria() + " --> ";
+                    }
+                    mensaje += n.getAristas().get(i).getFin().getmateria() + " -->";
+                    if (i != n.getAristas().size() - 1) {
+                        mensaje += ", " + n.getAristas().get(i).getInicio().getmateria() + " -->";
+                    }
+                }
+                sb.append(mensaje).append("\n\n");
+            }
+        }
+        return sb.toString();
+    }
 }

@@ -1,0 +1,18 @@
+@startuml
+class Universidad {
+    - listaCarreras: List<Carrera>
+    - nombre: String
+    - {static} instancia: Universidad
+    - listaMaterias: List<Materia>
+    - listaAlumnos: List<Alumno>
+
+    - Universidad(nombre: String)
+    + {static} getInstancia(nombre: String): Universidad
+    + agregarCarrera(carrera: Carrera): void
+    + getListaCarreras(): List<Carrera>
+    + agregarMateria(materia: Materia): void
+    + getListaMaterias(): List<Materia>
+    + agregarAlumno(alumno: Alumno): void
+    + getListaAlumnos(): List<Alumno>
+}
+@enduml

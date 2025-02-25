@@ -1,0 +1,17 @@
+@startuml
+class Materia {
+    - nombre: String
+    - esObligatoria: boolean
+    - cuatrimestre: int
+
+    + Materia(nombre: String, esObligatoria: boolean, cuatrimestre: int)
+    + setNombre(nombre: String): void
+    + setEsObligatoria(esObligatoria: boolean): void
+    + setCuatrimestre(cuatrimestre: int): void
+    + getNombre(): String
+    + getEsObligatoria(): boolean
+    + getCuatrimestre(): int
+    + toString(): String
+    + mostrarMateria(): String
+}
+@enduml

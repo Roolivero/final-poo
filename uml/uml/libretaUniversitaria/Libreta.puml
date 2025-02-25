@@ -1,0 +1,12 @@
+@startuml
+class Libreta {
+    - libreta: ArrayList<MateriaLibreta>
+
+    + Libreta()
+    + completarLibreta(materia: MateriaLibreta): void
+    + buscarMateria(materia: Materia): boolean
+    + libretaCompleta(plan: PlanEstudio): boolean
+    + mostrarLibreta(): void
+    + getLibreta(): ArrayList<MateriaLibreta>
+}
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+class Nodo {
+    - materia: Materia
+    - aristas: List<Arista>
+    - visitado: boolean
+
+    + Nodo(materia: Materia)
+    + agregarArista(nodoFinal: Nodo): void
+    + eliminarArista(nodoFinal: Nodo): void
+    + printNodo(): void
+    + esVisitado(): boolean
+    + setVisitado(visitado: Boolean): void
+    + setMateria(materia: Materia): void
+    + getmateria(): Materia
+    + getAristas(): List<Arista>
+    + getVisitado(): boolean
+    + equals(o: Object): boolean
+    + hashCode(): int
+}
+@enduml

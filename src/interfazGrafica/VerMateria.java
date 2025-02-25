@@ -156,7 +156,7 @@ public class VerMateria extends JPanel {
         textAreaCorrelativas.setEditable(false);
         textAreaCorrelativas.setFont(new Font("Arial", Font.PLAIN, 14));
         panelCorrelativas.add(new JScrollPane(textAreaCorrelativas), BorderLayout.CENTER);
-        tabbedPane.addTab("Correlativas de una materia", panelCorrelativas);
+        tabbedPane.addTab("Correlativas: ", panelCorrelativas);
 
 
         add(contenedorTabbedPane);

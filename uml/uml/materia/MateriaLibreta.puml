@@ -1,0 +1,12 @@
+@startuml
+class MateriaLibreta {
+    - notas: double
+    - estado: String
+
+    + MateriaLibreta(nombre: String, esObligatoria: boolean, cuatrimestre: int, notas: int, estado: String)
+    + setNotas(notas: int): void
+    + setEstado(estado: String): void
+    + getNotas(): double
+    + getEstado(): String
+}
+@enduml

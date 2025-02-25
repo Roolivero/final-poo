@@ -1,0 +1,10 @@
+@startuml
+class Arista {
+    - inicio: Nodo
+    - fin: Nodo
+
+    + Arista(inicio: Nodo, fin: Nodo)
+    + getInicio(): Nodo
+    + getFin(): Nodo
+}
+@enduml

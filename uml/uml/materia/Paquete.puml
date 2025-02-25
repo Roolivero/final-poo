@@ -1,0 +1,11 @@
+@startuml
+
+'package materia {
+    !include ./Materia.puml
+    !include ./MateriaLibreta.puml
+
+    Materia <|-- MateriaLibreta: Herencia
+'}
+
+
+@enduml

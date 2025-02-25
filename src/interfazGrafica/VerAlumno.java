@@ -2,6 +2,8 @@ package interfazGrafica;
 
 import alumno.Alumno;
 import carrera.Carrera;
+import grafoMaterias.Grafo;
+import grafoMaterias.Nodo;
 import materia.Materia;
 import materia.MateriaLibreta;
 import universidad.Universidad;
@@ -294,7 +296,6 @@ public class VerAlumno extends JPanel {
         panelFinalizacion.add(labelFinalizacion, BorderLayout.NORTH);
         tabbedPane.addTab("Finalización", panelFinalizacion);
 
-
         panelInfoAlumno.add(labelAlumno);
         panelInfoAlumno.add(Box.createVerticalStrut(10));
         panelInfoAlumno.add(labelDni);
@@ -517,6 +518,5 @@ public class VerAlumno extends JPanel {
         panelFinalizacion.revalidate();
         panelFinalizacion.repaint();
     }
-
 
 }

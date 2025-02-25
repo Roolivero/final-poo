@@ -1,0 +1,17 @@
+@startuml
+class PlanEstudio {
+    - correlativas: Grafo
+    - tipoPlan: char
+
+    + PlanEstudio(tipoPlan: char)
+    + grafoMaterias(materia: Materia, correlativa: Materia): void
+    + inscribirAlumnoMateria(alumno: Alumno, materia: Materia): boolean
+    - correlativasRegular(alumno: Alumno, materia: Materia): boolean
+    - correlativasAprobadas(alumno: Alumno, materia: Materia): boolean
+    - finalesAprobados(alumno: Alumno, materia: Materia, cuatri: int): boolean
+    - finalesAprobadosMenosCorrelativas(alumno: Alumno, materia: Materia, cuatri: int): boolean
+    + setTipoPlan(tipoPlan: char): void
+    + getTipoPlan(): char
+    + getGrafo(): Grafo
+}
+@enduml

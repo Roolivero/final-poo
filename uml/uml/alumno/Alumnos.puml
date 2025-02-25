@@ -1,0 +1,25 @@
+@startuml
+class Alumno {
+    - nombre: String
+    - apellido: String
+    - dni: String
+    - fechaNacimiento: LocalDate
+    - libretaAlumno: Libreta
+
+    + Alumno(nombre: String, apellido: String, dni: String, fechaNacimiento: LocalDate, libretaAlumno: Libreta)
+    + agregarMateriaLibreta(materia: MateriaLibreta): void
+    + terminoCarrera(alumno: Alumno, plan: PlanEstudio): boolean
+    + setNombre(nombre: String): void
+    + setApellido(apellido: String): void
+    + setDni(dni: String): void
+    + setFechaNacimiento(fechaNacimiento: LocalDate): void
+    + setLibretaAlumno(libretaAlumno: Libreta): void
+    + getNombre(): String
+    + getApellido(): String
+    + getDni(): String
+    + getFechaNacimiento(): LocalDate
+    + getLibretaAlumno(): Libreta
+    + toString(): String
+    + mostrarLista(): String
+}
+@enduml

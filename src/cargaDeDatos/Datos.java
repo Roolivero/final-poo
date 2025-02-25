@@ -33,11 +33,13 @@ public class Datos {
         Carrera carrera1 = new Carrera("Lic. en Sistemas", 5, planA);
         Carrera carrera2 = new Carrera("Lic. en Geología",5,planB);
         Carrera carrera3 = new Carrera("Lic. Biología", 5, planC);
+        Carrera carrera4 = new Carrera("Lic. en Turismo", 5, planD);
 
         //Agregar carreras a la universidad
         universidad.agregarCarrera(carrera1);
         universidad.agregarCarrera(carrera2);
         universidad.agregarCarrera(carrera3);
+        universidad.agregarCarrera(carrera4);
 
         // ---------------------------------------------------
 
@@ -503,9 +505,152 @@ public class Datos {
         planC.grafoMaterias(oceanografiaBiologica,biologiaEvolucion);
         planC.grafoMaterias(teledeteccion,biologiaEstadistica2);
 
-        //Materias
+        //Materias lic. en turismo
 
+        Materia introduccionAlTurismo = new Materia("Introducción al Turismo", true, 1);
+        Materia geografiaFisica = new Materia("Geografía Física", true, 1);
+        Materia sociologia = new Materia("Sociología", true, 2);
+        Materia epistemologia = new Materia("Epistemología", true, 2);
+        Materia seminarioIntroPracticasProf = new Materia("Seminario: Introducción a las Prácticas Profesionales", true, 2);
+        Materia servTurTransporte = new Materia("Servicios Turísticos. Transporte", true, 3);
+        Materia servTurAlojamiento = new Materia("Servicios Turísticos. Alojamiento", true, 3);
+        Materia ecologiaYConservacion = new Materia("Ecología y Conservación", true, 3);
+        Materia psicologiaSocial = new Materia("Psicología Social", true, 3);
+        Materia parquesNacionales = new Materia("Parques Nacionales", true, 4);
+        Materia geografiaHumana = new Materia("Geografía Humana", true, 4);
+        Materia historiaSocialArgentina = new Materia("Historia Social Argentina", true, 4);
+        Materia practicaProfesionalI = new Materia("Práctica Profesional I", true, 4);
+        Materia servTurAgenciasViajes = new Materia("Servicios Turísticos. Agencias de Viajes", true, 5);
+        Materia psicologiaGruposInstituciones = new Materia("Psicología de los Grupos y de las Instituciones", true, 5);
+        Materia patrimonioCultural = new Materia("Patrimonio Cultural", true, 5);
+        Materia metodologiaInvestigacion = new Materia("Metodología de la Investigación", true, 5);
+        Materia teoriaAdministracion = new Materia("Teoría de la Administración", true, 6);
+        Materia administracion = new Materia("Administración", true, 6);
+        Materia practicaProfesionalII = new Materia("Práctica Profesional II", true, 6);
+        Materia primerNivelIngles = new Materia("Primer Nivel de Idioma - Inglés", true, 6);
+        Materia adminEmpresasTuristicas = new Materia("Administración de Empresas Turísticas", true, 7);
+        Materia economia = new Materia("Economía", true, 7);
+        Materia antropologiaCultural = new Materia("Antropología Cultural", true, 7);
+        Materia politicaTuristica = new Materia("Política Turística", true, 8);
+        Materia historiaAmericana = new Materia("Historia Americana", true, 8);
+        Materia practicaProfesionalIII = new Materia("Práctica Profesional III", true, 8);
+        Materia planificacionTuristica = new Materia("Planificación Turística", true, 9);
+        Materia investigacionTuristica = new Materia("Investigación Turística", true, 9);
+        Materia practicaProfesionalIV = new Materia("Práctica Profesional IV", true, 9);
+        Materia seminarioOptativoI = new Materia("Seminario Optativo I", true, 10);
+        Materia seminarioOptativoII = new Materia("Seminario Optativo II", true, 10);
+        Materia tesisDeGrado = new Materia("Tesis de Grado", true, 10);
 
+        //Agregar las materias de tursimo a la universidad
+
+        universidad.agregarMateria(introduccionAlTurismo);
+        universidad.agregarMateria(geografiaFisica);
+        universidad.agregarMateria(sociologia);
+        universidad.agregarMateria(epistemologia);
+        universidad.agregarMateria(seminarioIntroPracticasProf);
+        universidad.agregarMateria(servTurTransporte);
+        universidad.agregarMateria(servTurAlojamiento);
+        universidad.agregarMateria(ecologiaYConservacion);
+        universidad.agregarMateria(psicologiaSocial);
+        universidad.agregarMateria(parquesNacionales);
+        universidad.agregarMateria(geografiaHumana);
+        universidad.agregarMateria(historiaSocialArgentina);
+        universidad.agregarMateria(practicaProfesionalI);
+        universidad.agregarMateria(servTurAgenciasViajes);
+        universidad.agregarMateria(psicologiaGruposInstituciones);
+        universidad.agregarMateria(patrimonioCultural);
+        universidad.agregarMateria(metodologiaInvestigacion);
+        universidad.agregarMateria(teoriaAdministracion);
+        universidad.agregarMateria(administracion);
+        universidad.agregarMateria(practicaProfesionalII);
+        universidad.agregarMateria(primerNivelIngles);
+        universidad.agregarMateria(adminEmpresasTuristicas);
+        universidad.agregarMateria(economia);
+        universidad.agregarMateria(antropologiaCultural);
+        universidad.agregarMateria(politicaTuristica);
+        universidad.agregarMateria(historiaAmericana);
+        universidad.agregarMateria(practicaProfesionalIII);
+        universidad.agregarMateria(planificacionTuristica);
+        universidad.agregarMateria(investigacionTuristica);
+        universidad.agregarMateria(practicaProfesionalIV);
+        universidad.agregarMateria(seminarioOptativoI);
+        universidad.agregarMateria(seminarioOptativoII);
+        universidad.agregarMateria(tesisDeGrado);
+
+        // Agregamos las materias a la carrera de turismo
+        carrera4.agregarMaterias(introduccionAlTurismo);
+        carrera4.agregarMaterias(geografiaFisica);
+        carrera4.agregarMaterias(sociologia);
+        carrera4.agregarMaterias(epistemologia);
+        carrera4.agregarMaterias(seminarioIntroPracticasProf);
+        carrera4.agregarMaterias(servTurTransporte);
+        carrera4.agregarMaterias(servTurAlojamiento);
+        carrera4.agregarMaterias(ecologiaYConservacion);
+        carrera4.agregarMaterias(psicologiaSocial);
+        carrera4.agregarMaterias(parquesNacionales);
+        carrera4.agregarMaterias(geografiaHumana);
+        carrera4.agregarMaterias(historiaSocialArgentina);
+        carrera4.agregarMaterias(practicaProfesionalI);
+        carrera4.agregarMaterias(servTurAgenciasViajes);
+        carrera4.agregarMaterias(psicologiaGruposInstituciones);
+        carrera4.agregarMaterias(patrimonioCultural);
+        carrera4.agregarMaterias(metodologiaInvestigacion);
+        carrera4.agregarMaterias(teoriaAdministracion);
+        carrera4.agregarMaterias(administracion);
+        carrera4.agregarMaterias(practicaProfesionalII);
+        carrera4.agregarMaterias(primerNivelIngles);
+        carrera4.agregarMaterias(adminEmpresasTuristicas);
+        carrera4.agregarMaterias(economia);
+        carrera4.agregarMaterias(antropologiaCultural);
+        carrera4.agregarMaterias(politicaTuristica);
+        carrera4.agregarMaterias(historiaAmericana);
+        carrera4.agregarMaterias(practicaProfesionalIII);
+        carrera4.agregarMaterias(planificacionTuristica);
+        carrera4.agregarMaterias(investigacionTuristica);
+        carrera4.agregarMaterias(practicaProfesionalIV);
+        carrera4.agregarMaterias(seminarioOptativoI);
+        carrera4.agregarMaterias(seminarioOptativoII);
+        carrera4.agregarMaterias(tesisDeGrado);
+
+        //Agregar las materias al plan de estudio D
+
+        planD.grafoMaterias(introduccionAlTurismo,null);
+        planD.grafoMaterias(geografiaFisica,null);
+        planD.grafoMaterias(sociologia,null);
+        planD.grafoMaterias(epistemologia,null);
+        planD.grafoMaterias(seminarioIntroPracticasProf,null);
+        planD.grafoMaterias(servTurTransporte,introduccionAlTurismo);
+        planD.grafoMaterias(servTurAlojamiento,introduccionAlTurismo);
+        planD.grafoMaterias(ecologiaYConservacion, geografiaFisica);
+        planD.grafoMaterias(psicologiaSocial, sociologia);
+        planD.grafoMaterias(parquesNacionales, geografiaFisica);
+        planD.grafoMaterias(parquesNacionales, ecologiaYConservacion);
+        planD.grafoMaterias(geografiaHumana, geografiaFisica);
+        planD.grafoMaterias(historiaSocialArgentina, sociologia);
+        planD.grafoMaterias(practicaProfesionalI, introduccionAlTurismo);
+        planD.grafoMaterias(practicaProfesionalI, geografiaFisica);
+        planD.grafoMaterias(practicaProfesionalI, seminarioIntroPracticasProf);
+        planD.grafoMaterias(servTurAgenciasViajes, servTurTransporte);
+        planD.grafoMaterias(psicologiaGruposInstituciones, psicologiaSocial);
+        planD.grafoMaterias(patrimonioCultural, historiaSocialArgentina);
+        planD.grafoMaterias(metodologiaInvestigacion, epistemologia);
+        planD.grafoMaterias(teoriaAdministracion, null);
+        planD.grafoMaterias(practicaProfesionalII, practicaProfesionalI);
+        planD.grafoMaterias(primerNivelIngles, null);
+        planD.grafoMaterias(adminEmpresasTuristicas, servTurAgenciasViajes);
+        planD.grafoMaterias(adminEmpresasTuristicas, teoriaAdministracion);
+        planD.grafoMaterias(economia, null);
+        planD.grafoMaterias(antropologiaCultural, sociologia);
+        planD.grafoMaterias(politicaTuristica, introduccionAlTurismo);
+        planD.grafoMaterias(politicaTuristica, sociologia);
+        planD.grafoMaterias(historiaAmericana, historiaSocialArgentina);
+        planD.grafoMaterias(practicaProfesionalIII, practicaProfesionalII);
+        planD.grafoMaterias(planificacionTuristica, metodologiaInvestigacion);
+        planD.grafoMaterias(investigacionTuristica, metodologiaInvestigacion);
+        planD.grafoMaterias(practicaProfesionalIV, practicaProfesionalIII);
+        planD.grafoMaterias(seminarioOptativoI, null);
+        planD.grafoMaterias(seminarioOptativoII, seminarioOptativoI);
+        planD.grafoMaterias(tesisDeGrado, practicaProfesionalIV);
 
 
         //Alumnos
@@ -590,7 +735,26 @@ public class Datos {
         alumno3.agregarMateriaLibreta(microorganismosProtistasHongosLibreta);
         alumno3.agregarMateriaLibreta(biologiaAnimalLibreta);
 
-        //---------------------------------------------
+        //---------------------------------------------\
+
+        //Inscribir a constanza a Turismo
+        carrera4.inscribirAlumno(alumno4);
+
+        // Crear las materias de la Libreta de constanza
+        MateriaLibreta introduccionTurismoLibreta = new MateriaLibreta("Introducción al Turismo", true, 1,8,"Aprobada");
+        MateriaLibreta geografiaFisicaLibreta = new MateriaLibreta("Geografía Física", true, 1,9,"Aprobada");
+        MateriaLibreta sociologiaLibreta = new MateriaLibreta("Sociología", true, 2,10,"Aprobada");
+        MateriaLibreta epistemologiaLibreta = new MateriaLibreta("Epistemología", true, 2,7,"Aprobada");
+        MateriaLibreta seminarioIntroPracticasProfLibreta = new MateriaLibreta("Seminario: Introducción a las Prácticas Profesionales", true, 2,8,"Aprobada");
+
+        //Agregar las materias a su libreta
+
+        alumno4.agregarMateriaLibreta(introduccionTurismoLibreta);
+        alumno4.agregarMateriaLibreta(geografiaFisicaLibreta);
+        alumno4.agregarMateriaLibreta(sociologiaLibreta);
+        alumno4.agregarMateriaLibreta(epistemologiaLibreta);
+        alumno4.agregarMateriaLibreta(seminarioIntroPracticasProfLibreta);
+
 
     }
 }

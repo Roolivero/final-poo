@@ -698,6 +698,7 @@ public class Datos {
         MateriaLibreta fisica1Libreta = new MateriaLibreta("Física I",true, 2,9,"Aprobada");
         MateriaLibreta mateAvanzadaLibreta = new MateriaLibreta("Matemática avanzada", true, 2,10,"Aprobada");
         MateriaLibreta paleontologiaLibreta = new MateriaLibreta("Paleontología I", true, 3,7,"Regular");
+        MateriaLibreta estadisticaGeoLibreta = new MateriaLibreta("Estadística para Geología", true, 3,8,"Aprobada");
 
         //Agregar materias a la libreta de Giuliano
         alumno2.agregarMateriaLibreta(introduccionLibreta);
@@ -706,6 +707,7 @@ public class Datos {
         alumno2.agregarMateriaLibreta(fisica1Libreta);
         alumno2.agregarMateriaLibreta(mateAvanzadaLibreta);
         alumno2.agregarMateriaLibreta(paleontologiaLibreta);
+        alumno2.agregarMateriaLibreta(estadisticaGeoLibreta);
 
         // ----------------------------------------
 
@@ -722,6 +724,11 @@ public class Datos {
         MateriaLibreta quimicaOrganicaLibreta = new MateriaLibreta("Química Orgánica", true, 2,7,"Aprobada");
         MateriaLibreta microorganismosProtistasHongosLibreta = new MateriaLibreta("Biología de Microorganismos, Protistas y Hongos", true, 2,8,"Aprobada");
         MateriaLibreta biologiaAnimalLibreta = new MateriaLibreta("Biología Animal", true, 3,8,"Aprobada");
+        MateriaLibreta quimicaBiologicaLibreta = new MateriaLibreta("Química Biológica", true, 3,10,"Aprobada");
+        MateriaLibreta estadisticaBioLibreta = new MateriaLibreta("Estadística para Geología", true, 3,7,"Aprobada");
+        MateriaLibreta diversidadAnimal1Libreta = new MateriaLibreta("Diversidad Animal I", true, 4,8,"Aprobada");
+        MateriaLibreta biologiaMolecularCelularLibreta = new MateriaLibreta("Biología Molecular y Celular", true, 4,9,"Aprobada");
+        MateriaLibreta estadistica1Libreta = new MateriaLibreta("Estadística para Geología", true, 3,7,"Aprobada");
 
 
         //Agregar materias a la libreta de Ignacio
@@ -734,6 +741,12 @@ public class Datos {
         alumno3.agregarMateriaLibreta(quimicaOrganicaLibreta);
         alumno3.agregarMateriaLibreta(microorganismosProtistasHongosLibreta);
         alumno3.agregarMateriaLibreta(biologiaAnimalLibreta);
+        alumno3.agregarMateriaLibreta(quimicaBiologicaLibreta);
+        alumno3.agregarMateriaLibreta(estadisticaBioLibreta);
+        alumno3.agregarMateriaLibreta(diversidadAnimal1Libreta);
+        alumno3.agregarMateriaLibreta(quimicaOrganicaLibreta);
+        alumno3.agregarMateriaLibreta(biologiaMolecularCelularLibreta);
+        alumno3.agregarMateriaLibreta(estadistica1Libreta);
 
         //---------------------------------------------\
 
@@ -746,6 +759,11 @@ public class Datos {
         MateriaLibreta sociologiaLibreta = new MateriaLibreta("Sociología", true, 2,10,"Aprobada");
         MateriaLibreta epistemologiaLibreta = new MateriaLibreta("Epistemología", true, 2,7,"Aprobada");
         MateriaLibreta seminarioIntroPracticasProfLibreta = new MateriaLibreta("Seminario: Introducción a las Prácticas Profesionales", true, 2,8,"Aprobada");
+        MateriaLibreta servTurTransporteLibreta = new MateriaLibreta("Servicios Turísticos. Transporte", true, 3,8,"Aprobada");
+        MateriaLibreta servTurAlojamientoLibreta = new MateriaLibreta("Servicios Turísticos. Alojamiento", true, 3,10,"Aprobada");
+        MateriaLibreta ecologiaYConservacionLibreta = new MateriaLibreta("Ecología y Conservación", true, 3,7,"Aprobada");
+        MateriaLibreta psicologiaSocialLibreta = new MateriaLibreta("Psicología Social", true, 3,8,"Aprobada");
+        MateriaLibreta parquesNacionalesLibreta = new MateriaLibreta("Parques Nacionales", true, 4,8,"Aprobada");
 
         //Agregar las materias a su libreta
 
@@ -754,6 +772,11 @@ public class Datos {
         alumno4.agregarMateriaLibreta(sociologiaLibreta);
         alumno4.agregarMateriaLibreta(epistemologiaLibreta);
         alumno4.agregarMateriaLibreta(seminarioIntroPracticasProfLibreta);
+        alumno4.agregarMateriaLibreta(servTurTransporteLibreta);
+        alumno4.agregarMateriaLibreta(servTurAlojamientoLibreta);
+        alumno4.agregarMateriaLibreta(ecologiaYConservacionLibreta);
+        alumno4.agregarMateriaLibreta(psicologiaSocialLibreta);
+        alumno4.agregarMateriaLibreta(parquesNacionalesLibreta);
 
 
     }

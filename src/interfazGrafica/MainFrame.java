@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
 
         JLabel labelTitulo = new JLabel("Universidad Nacional Tierra del Fuego", SwingConstants.CENTER);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        mainPanel.setBackground(new Color(148, 97, 191));
+        mainPanel.setBackground(new Color(129, 91, 165));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
 
         panelBotones = new JPanel();
@@ -91,7 +91,7 @@ public class MainFrame extends JFrame {
         String botonAgregar = "Agregar " + nombre;
 
         JButton verCarrera = new JButton(botonVer);
-        personalizarBoton(verCarrera, new Color(166, 144, 246),new Color(10, 2, 43), 18);
+        personalizarBoton(verCarrera,new Color(129, 91, 165),new Color(255, 255, 255), 18);
         verCarrera.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 panelCentro.removeAll();
@@ -110,7 +110,7 @@ public class MainFrame extends JFrame {
         panelBotones.add(verCarrera);
 
         JButton agregarCarreras = new JButton(botonAgregar);
-        personalizarBoton(agregarCarreras, new Color(166, 144, 246), new Color(10, 2, 43), 18);
+        personalizarBoton(agregarCarreras, new Color(129, 91, 165), new Color(255, 255, 255), 18);
         agregarCarreras.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 panelCentro.removeAll();

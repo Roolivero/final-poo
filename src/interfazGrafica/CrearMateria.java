@@ -136,7 +136,7 @@ public class CrearMateria extends JPanel {
 
 
         JButton botonCrear = new JButton("Crear materia");
-        mainFrame.personalizarBoton(botonCrear, new Color(166, 144, 246), new Color(10, 2, 43), 16);
+        mainFrame.personalizarBoton(botonCrear,new Color(129, 91, 165),new Color(255, 255, 255), 16);
         botonCrear.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonCrear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

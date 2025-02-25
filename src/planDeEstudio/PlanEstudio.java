@@ -6,7 +6,9 @@ import grafoMaterias.Nodo;
 import materia.Materia;
 import materia.MateriaLibreta;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PlanEstudio {
     //Atributos
@@ -69,10 +71,8 @@ public class PlanEstudio {
                 return false;
             }
         } else if (this.getTipoPlan() == 'C') {
-            boolean verificarCorrelativa = false;
-            boolean verificarMateriaCuatrimestre = false;
-            verificarCorrelativa = correlativasRegular(alumno, materia);
-            verificarMateriaCuatrimestre = finalesAprobados(alumno, materia, 5);
+            boolean verificarCorrelativa = correlativasRegular(alumno, materia);
+            boolean verificarMateriaCuatrimestre = finalesAprobadosMenosCorrelativas(alumno, materia, 5);
             if (verificarCorrelativa && verificarMateriaCuatrimestre) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
@@ -82,10 +82,8 @@ public class PlanEstudio {
                 return false;
             }
         } else if (this.getTipoPlan() == 'D') {
-            boolean verificarCorrelativa = false;
-            boolean verificarMateriaCuatrimestre = false;
-            verificarCorrelativa = correlativasRegular(alumno, materia);
-            verificarMateriaCuatrimestre = finalesAprobados(alumno, materia, 3);
+            boolean verificarCorrelativa = correlativasRegular(alumno, materia);
+            boolean verificarMateriaCuatrimestre = finalesAprobadosMenosCorrelativas(alumno, materia, 3);
             if (verificarCorrelativa && verificarMateriaCuatrimestre) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
@@ -95,10 +93,8 @@ public class PlanEstudio {
                 return false;
             }
         } else if (this.getTipoPlan() == 'E') {
-            boolean verificarCorrelativa = false;
-            boolean verificarMateriaCuatrimestre = false;
-            verificarCorrelativa = correlativasAprobadas(alumno, materia);
-            verificarMateriaCuatrimestre = finalesAprobados(alumno, materia, 3);
+            boolean verificarCorrelativa = correlativasRegular(alumno, materia);
+            boolean verificarMateriaCuatrimestre = finalesAprobados(alumno, materia, 3);
             if (verificarCorrelativa && verificarMateriaCuatrimestre) {
                 MateriaLibreta nuevaMateriaLibreta = new MateriaLibreta(materia.getNombre(), materia.getEsObligatoria(), materia.getCuatrimestre(), 0, "Cursando");
                 alumno.getLibretaAlumno().getLibreta().add(nuevaMateriaLibreta);
@@ -121,7 +117,7 @@ public class PlanEstudio {
             boolean encontrada = false;
             for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
                 if (correlativa.getmateria().getNombre().equals(materiaLibreta.getNombre()) &&
-                        "Regular".equals(materiaLibreta.getEstado())) {
+                        ("Regular".equals(materiaLibreta.getEstado()) || "Aprobada".equals(materiaLibreta.getEstado()))) {
                     encontrada = true;
                     break;
                 }
@@ -178,6 +174,41 @@ public class PlanEstudio {
         }
         return true;
     }
+
+    private boolean finalesAprobadosMenosCorrelativas(Alumno alumno, Materia materia, int cuatri) {
+        int cuatrimestre = materia.getCuatrimestre();
+        List<Nodo> materiasCuatrimestre = this.getGrafo().materiasPorCuatrimestre(cuatrimestre, cuatri);
+        List<Nodo> correlativasDirectas = this.getGrafo().correlativasDirectas(materia);
+        Set<String> nombresCorrelativas = new HashSet<>();
+
+        for (Nodo correlativa : correlativasDirectas) {
+            nombresCorrelativas.add(correlativa.getmateria().getNombre());
+        }
+
+        if (materiasCuatrimestre == null || materiasCuatrimestre.isEmpty()) {
+            return true;
+        }
+
+        for (Nodo nodo : materiasCuatrimestre) {
+            String nombreMateria = nodo.getmateria().getNombre();
+            if (nombresCorrelativas.contains(nombreMateria)) {
+                continue;
+            }
+            boolean encontrada = false;
+            for (MateriaLibreta materiaLibreta : alumno.getLibretaAlumno().getLibreta()) {
+                if (nombreMateria.equals(materiaLibreta.getNombre()) &&
+                        "Aprobada".equals(materiaLibreta.getEstado())) {
+                    encontrada = true;
+                    break;
+                }
+            }
+            if (!encontrada) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     //Setters y getters
     public void setTipoPlan(char tipoPlan){this.tipoPlan = tipoPlan;}

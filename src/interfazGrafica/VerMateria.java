@@ -2,10 +2,13 @@ package interfazGrafica;
 
 import alumno.Alumno;
 import carrera.Carrera;
+import grafoMaterias.Nodo;
 import materia.Materia;
 import universidad.Universidad;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,13 +17,30 @@ import java.util.List;
 
 public class VerMateria extends JPanel {
 
+    private MainFrame mainFrame;
+    private JPanel panelInfoMateria;
+    private JLabel labelNombreMateria;
+    private JLabel labelCuatrimestre;
+    private JLabel labelEsObligatoria;
+    private JTabbedPane tabbedPane;
+    private DefaultListModel<String> modeloMaterias;
+    private JList<String> listaMaterias;
+    private DefaultListModel<String> modeloCarreras;
+    private JList<String> listaCarreras;
+    private List<Materia> listaTodasMaterias;
+    private JTextArea textAreaCorrelativas;
+
+
     public VerMateria(MainFrame mainFrame) {
+        this.mainFrame =mainFrame;
 
         Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
+        listaTodasMaterias = universidad.getListaMaterias();
 
         setBackground(new Color(229, 224, 243));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        //Panel boton Volver
         JPanel panelBotonVolver = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelBotonVolver.setBackground(new Color(229, 224, 243));
         JButton botonVolver = new JButton("Volver");
@@ -37,114 +57,162 @@ public class VerMateria extends JPanel {
         panelBotonVolver.add(botonVolver);
         add(panelBotonVolver);
 
-        JLabel labelTitulo = new JLabel("Seleccione una materia ");
-        Font fuenteTitulo = new Font("Arial", Font.BOLD, 18);
-        labelTitulo.setFont(fuenteTitulo);
-        labelTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        //Panel con info materia
+        panelInfoMateria = new JPanel();
+        panelInfoMateria.setLayout(new BoxLayout(panelInfoMateria, BoxLayout.Y_AXIS));
+        panelInfoMateria.setBackground(new Color(229, 224, 243));
+        panelInfoMateria.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        List<Materia> listaMaterias = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
-        JComboBox comboMaterias = new JComboBox<>();
-        for (Materia m : listaMaterias) {
-            comboMaterias.addItem(m.getNombre());
-        }
-        DefaultListCellRenderer renderer = new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value,
-                                                          int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (isSelected) {
-                    setBackground(new Color(187, 169, 250));
-                    setForeground(Color.WHITE);
-                } else {
-                    setBackground(Color.WHITE);
-                    setForeground(Color.BLACK);
-                }
-                return this;
-            }
-        };
-        comboMaterias.setRenderer(renderer);
-        comboMaterias.setBackground(Color.WHITE);
-        comboMaterias.setSelectedIndex(-1);
-        Font fuenteCombo = new Font("Arial", Font.PLAIN, 16);
-        comboMaterias.setFont(fuenteCombo);
-        comboMaterias.setPreferredSize(new Dimension(400, 30));
-        comboMaterias.setMaximumSize(new Dimension(400, 30));
-        comboMaterias.setAlignmentX(Component.CENTER_ALIGNMENT);
+        labelNombreMateria = new JLabel("Materia: ");
+        labelNombreMateria.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        JPanel panelInfoMaterias = new JPanel();
-        panelInfoMaterias.setBackground(new Color(229, 224, 243));
-        panelInfoMaterias.setLayout(new BoxLayout(panelInfoMaterias, BoxLayout.Y_AXIS));
-        panelInfoMaterias.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        Dimension maxSize = new Dimension(650, panelInfoMaterias.getMaximumSize().height);
-        panelInfoMaterias.setMaximumSize(maxSize);
-
-        JLabel labelNombre = new JLabel("Nombre de la materia: ");
-        labelNombre.setFont(new Font("Arial", Font.PLAIN, 16));
-        labelNombre.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel labelTipo = new JLabel("Tipo de materia: ");
-        labelTipo.setFont(new Font("Arial", Font.PLAIN, 16));
-        labelTipo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel labelCuatrimestre = new JLabel("Cuatrimestre: ");
+        labelCuatrimestre = new JLabel("Cuatrimestre: ");
         labelCuatrimestre.setFont(new Font("Arial", Font.PLAIN, 16));
-        labelCuatrimestre.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
-        JPanel panelCarreras = new JPanel(new BorderLayout());
-        DefaultListModel modeloCarreras = new DefaultListModel<>();
-        JList listaCarreras = new JList<>(modeloCarreras);
-        listaCarreras.setFont(new Font("Arial", Font.PLAIN, 14));
-        panelCarreras.add(new JScrollPane(listaCarreras), BorderLayout.CENTER);
+        labelEsObligatoria = new JLabel("Es obligatoria: ");
+        labelEsObligatoria.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        tabbedPane.addTab("Carrera/s a la que pertenece", panelCarreras);
+        panelInfoMateria.add(labelNombreMateria);
+        panelInfoMateria.add(Box.createVerticalStrut(5));
+        panelInfoMateria.add(labelCuatrimestre);
+        panelInfoMateria.add(Box.createVerticalStrut(5));
+        panelInfoMateria.add(labelEsObligatoria);
+        panelInfoMateria.add(Box.createVerticalStrut(30));
 
-        panelInfoMaterias.add(labelNombre);
-        panelInfoMaterias.add(Box.createVerticalStrut(5));
-        panelInfoMaterias.add(labelTipo);
-        panelInfoMaterias.add(Box.createVerticalStrut(5));
-        panelInfoMaterias.add(labelCuatrimestre);
-        panelInfoMaterias.add(Box.createVerticalStrut(5));
-        panelInfoMaterias.add(tabbedPane);
-        panelInfoMaterias.add(Box.createVerticalStrut(5));
+        add(panelInfoMateria);
 
-        add(Box.createVerticalStrut(10));
-        add(labelTitulo);
-        add(Box.createVerticalStrut(10));
-        add(comboMaterias);
-        add(Box.createVerticalStrut(20));
-        add(panelInfoMaterias);
-        add(Box.createVerticalGlue());
+        JPanel contenedorTabbedPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        contenedorTabbedPane.setBackground(new Color(229, 224, 243));
+        contenedorTabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        panelInfoMaterias.setVisible(false);
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setPreferredSize(new Dimension(550, 300));
 
-        comboMaterias.addActionListener(e -> {
-            String materiaSeleccionada = (String) comboMaterias.getSelectedItem();
-            if (materiaSeleccionada != null) {
-                Materia materia = listaMaterias.stream()
-                        .filter(c -> c.getNombre().equals(materiaSeleccionada))
-                        .findFirst()
-                        .orElse(null);
-                if (materia != null) {
-                    panelInfoMaterias.setVisible(true);
+        contenedorTabbedPane.add(tabbedPane);
 
-                    labelNombre.setText("Materia: " + materia.getNombre());
-                    if(materia.getEsObligatoria()){
-                        labelTipo.setText("Tipo de materia: obligatoria ");
-                    } else {
-                        labelTipo.setText("Tipo de materia: optativa ");
-                    }
-                    labelCuatrimestre.setText("Cuatrimestre en la que se dicta: " + materia.getCuatrimestre() + "°" );
 
-                    modeloCarreras.clear();
-                    for(Carrera carrera : universidad.getListaCarreras()){
-                        if (carrera.getMaterias().contains(materia)){
-                           modeloCarreras.addElement("- " + carrera.getNombre() + "\n");
-                        }
-                    }
+        // Pestaña 1: Lista de materias con búsqueda
+        JPanel panelMaterias = new JPanel(new BorderLayout());
+        JTextField searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(250, 30));
+        panelMaterias.add(searchField, BorderLayout.NORTH);
 
+        modeloMaterias = new DefaultListModel<>();
+        listaMaterias = new JList<>(modeloMaterias);
+        listaMaterias.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMaterias.add(new JScrollPane(listaMaterias), BorderLayout.CENTER);
+
+        JButton btnVerMateria = new JButton("Ver materia");
+        btnVerMateria.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String materiaSeleccionada = listaMaterias.getSelectedValue();
+                if (materiaSeleccionada != null) {
+                    mostrarInformacionMateria(materiaSeleccionada);
+                } else {
+                    JOptionPane.showMessageDialog(panelMaterias,
+                            "Por favor, seleccione una materia de la lista.",
+                            "Aviso",
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
+                searchField.setText("");
+                actualizarListaMaterias("");
             }
         });
+        panelMaterias.add(btnVerMateria,BorderLayout.SOUTH);
+
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                actualizarListaMaterias(searchField.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                actualizarListaMaterias(searchField.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                actualizarListaMaterias(searchField.getText());
+            }
+        });
+
+        actualizarListaMaterias("");
+        tabbedPane.addTab("Todas las materias", panelMaterias);
+
+        // Pestaña 2: Carreras de la materia seleccionada
+        JPanel panelCarreras = new JPanel(new BorderLayout());
+        modeloCarreras = new DefaultListModel<>();
+        listaCarreras = new JList<>(modeloCarreras);
+        listaCarreras.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelCarreras.add(new JScrollPane(listaCarreras), BorderLayout.CENTER);
+        tabbedPane.addTab("Carrera/s a la que pertenece", panelCarreras);
+
+
+        // Pestaña 3: Correlativas de una materia
+        JPanel panelCorrelativas = new JPanel(new BorderLayout());
+        textAreaCorrelativas = new JTextArea();
+        textAreaCorrelativas.setEditable(false);
+        textAreaCorrelativas.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelCorrelativas.add(new JScrollPane(textAreaCorrelativas), BorderLayout.CENTER);
+        tabbedPane.addTab("Correlativas de una materia", panelCorrelativas);
+
+
+        add(contenedorTabbedPane);
+    }
+
+    private void actualizarListaMaterias(String filtro) {
+        modeloMaterias.clear();
+        for (Materia materia : listaTodasMaterias) {
+            if (materia.getNombre().toLowerCase().contains(filtro.toLowerCase())) {
+                modeloMaterias.addElement(materia.getNombre());
+            }
+        }
+    }
+
+    private void mostrarInformacionMateria(String nombreMateria) {
+        Materia materia = listaTodasMaterias.stream()
+                .filter(m -> m.getNombre().equals(nombreMateria))
+                .findFirst()
+                .orElse(null);
+
+        if (materia != null) {
+            labelNombreMateria.setText("Materia: " + materia.getNombre());
+            labelCuatrimestre.setText("Cuatrimestre: " + materia.getCuatrimestre());
+            if(materia.getEsObligatoria()){
+                labelEsObligatoria.setText("Tipo de materia: obligatoria ");
+            } else {
+                labelEsObligatoria.setText("Tipo de materia: optativa ");
+            }
+
+            modeloCarreras.clear();
+            for (Carrera carrera : Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaCarreras()) {
+                if (carrera.getMaterias().contains(materia)) {
+                    modeloCarreras.addElement(carrera.getNombre());
+                }
+            }
+        }
+        actualizarCorrelativas(materia);
+    }
+
+    private void actualizarCorrelativas(Materia materia) {
+        textAreaCorrelativas.setText("");
+        for (Carrera carrera : Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaCarreras()) {
+            if (carrera.getMaterias().contains(materia)) {
+                if (carrera.getPlanEstudio() != null && carrera.getPlanEstudio().getGrafo() != null) {
+                    List<Nodo> correlativas = carrera.getPlanEstudio().getGrafo().correlativasDirectas(materia);
+                    textAreaCorrelativas.append(carrera.getNombre() + ":\n");
+                    if (correlativas.isEmpty()) {
+                        textAreaCorrelativas.append(" - No tiene correlativas directas.\n");
+                    } else {
+                        for (Nodo nodo : correlativas) {
+                            textAreaCorrelativas.append(" - " + nodo.getmateria().getNombre() + "\n");
+                        }
+                    }
+                    textAreaCorrelativas.append("\n");
+                }
+            }
+        }
     }
 }

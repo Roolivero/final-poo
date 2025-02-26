@@ -1,8 +1,6 @@
 package interfazGrafica;
 
-import carrera.Carrera;
 import materia.Materia;
-import planDeEstudio.PlanEstudio;
 import universidad.Universidad;
 
 import javax.swing.*;
@@ -18,6 +16,7 @@ public class CrearMateria extends JPanel {
     private JPanel panelBotonVolver;
 
     public CrearMateria(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
 
         Universidad universidad = Universidad.getInstancia("Universidad Nacional Tierra del Fuego");
 

@@ -216,73 +216,68 @@ public class VerCarrera extends JPanel {
                 return;
             }
 
-
             int opcion = JOptionPane.showOptionDialog(this, "Tiene correlativas?", "Agregar Correlativas",
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Si", "No"}, "No");
-
 
             java.util.List<Materia> correlativasSeleccionadas = new java.util.ArrayList<>();
             if (opcion == JOptionPane.YES_OPTION) {
 
                 java.util.List<Materia> todasMaterias = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
                 java.util.List<Materia> materiasFiltradas = todasMaterias.stream()
-                        .filter(m -> !m.getNombre().equals(materiaSeleccionada))
+                        .filter(m -> !m.getNombre().equals(materiaSeleccionada)
+                                && m.getCuatrimestre() < materia.getCuatrimestre())
                         .collect(java.util.stream.Collectors.toList());
 
-                final String[] nombresMaterias = new String[materiasFiltradas.size()];
-                for (int i = 0; i < materiasFiltradas.size(); i++) {
-                    nombresMaterias[i] = materiasFiltradas.get(i).getNombre();
-                }
+                if (materiasFiltradas.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay materias disponibles de cuatrimestres anteriores", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    carrera.getPlanEstudio().grafoMaterias(materia, null);
+                } else {
+                    final String[] nombresMaterias = new String[materiasFiltradas.size()];
+                    for (int i = 0; i < materiasFiltradas.size(); i++) {
+                        nombresMaterias[i] = materiasFiltradas.get(i).getNombre();
+                    }
 
-                JPanel panelCheckboxes = new JPanel();
-                panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS));
+                    JPanel panelCheckboxes = new JPanel();
+                    panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS));
 
-                JCheckBox[] checkboxes = new JCheckBox[nombresMaterias.length];
-                for (int i = 0; i < nombresMaterias.length; i++) {
-                    checkboxes[i] = new JCheckBox(nombresMaterias[i]);
-                    panelCheckboxes.add(checkboxes[i]);
-                }
+                    JCheckBox[] checkboxes = new JCheckBox[nombresMaterias.length];
+                    for (int i = 0; i < nombresMaterias.length; i++) {
+                        checkboxes[i] = new JCheckBox(nombresMaterias[i]);
+                        panelCheckboxes.add(checkboxes[i]);
+                    }
 
-                JScrollPane scrollPane = new JScrollPane(panelCheckboxes);
-                scrollPane.setPreferredSize(new Dimension(250, 150));
+                    JScrollPane scrollPane = new JScrollPane(panelCheckboxes);
+                    scrollPane.setPreferredSize(new Dimension(250, 150));
 
-                int result = JOptionPane.showConfirmDialog(this, scrollPane, "Seleccione la/s correlativas", JOptionPane.OK_CANCEL_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    for (int i = 0; i < checkboxes.length; i++) {
-                        if (checkboxes[i].isSelected()) {
-                            final int index = i;
-                            Materia correlativa = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
-                                    .getListaMaterias()
-                                    .stream()
-                                    .filter(m -> m.getNombre().equals(nombresMaterias[index]))
-                                    .findFirst()
-                                    .orElse(null);
-                            if (correlativa != null) {
-                                correlativasSeleccionadas.add(correlativa);
+                    int result = JOptionPane.showConfirmDialog(this, scrollPane, "Seleccione la/s correlativas", JOptionPane.OK_CANCEL_OPTION);
+                    if (result == JOptionPane.OK_OPTION) {
+                        for (int i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i].isSelected()) {
+                                correlativasSeleccionadas.add(materiasFiltradas.get(i));
                             }
                         }
                     }
-                }
-            }
-            carrera.getMaterias().add(materia);
-            labelCantidadMaterias.setText("Cantidad de materias: " + carrera.getMaterias().size());
-            actualizarListaMaterias(carrera);
 
-            if (opcion == JOptionPane.YES_OPTION) {
-                for (Materia m : correlativasSeleccionadas) {
-                    carrera.getPlanEstudio().grafoMaterias(materia, m);
+                    for (Materia m : correlativasSeleccionadas) {
+                        carrera.getPlanEstudio().grafoMaterias(materia, m);
+                    }
                 }
+
                 String correlativasText = obtenerCorrelativas(carrera.getPlanEstudio().getGrafo());
                 textAreaPlanEstudio.setText(correlativasText);
                 textAreaPlanEstudio.revalidate();
                 textAreaPlanEstudio.repaint();
-            } else  if (opcion == JOptionPane.NO_OPTION) {
+            } else if (opcion == JOptionPane.NO_OPTION) {
                 carrera.getPlanEstudio().grafoMaterias(materia, null);
                 String correlativasText = obtenerCorrelativas(carrera.getPlanEstudio().getGrafo());
                 textAreaPlanEstudio.setText(correlativasText);
                 textAreaPlanEstudio.revalidate();
                 textAreaPlanEstudio.repaint();
             }
+
+            carrera.getMaterias().add(materia);
+            labelCantidadMaterias.setText("Cantidad de materias: " + carrera.getMaterias().size());
+            actualizarListaMaterias(carrera);
 
             String mensaje = "Materia agregada a la carrera.";
             if (!correlativasSeleccionadas.isEmpty()) {

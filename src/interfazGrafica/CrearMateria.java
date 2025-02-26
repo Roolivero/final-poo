@@ -183,7 +183,7 @@ public class CrearMateria extends JPanel {
         universidad.agregarMateria(materia);
 
         JOptionPane.showMessageDialog(this,
-                "¡Materia creada exitosamente!\n\n" +
+                "¡Materia creada exitosamente en la universidad!\n\n" +
                         "Nombre: " + nombre + "\n" +
                         "Tipo: " + tipoSeleccionado + "\n" +
                         "Cuatrimestre: " + cuatrimestre,

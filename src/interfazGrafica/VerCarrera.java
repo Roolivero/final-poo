@@ -18,6 +18,9 @@ import java.util.TreeMap;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VerCarrera extends JPanel {
 
@@ -182,13 +185,17 @@ public class VerCarrera extends JPanel {
                 return;
             }
 
+            final String materiaLimpia = materiaSeleccionada.startsWith(" - ")
+                    ? materiaSeleccionada.substring(3).trim()
+                    : materiaSeleccionada;
+
+
             Materia materia = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
                     .getListaMaterias()
                     .stream()
-                    .filter(m -> m.getNombre().equals(materiaSeleccionada))
+                    .filter(m -> m.getNombre().equals(materiaLimpia))
                     .findFirst()
                     .orElse(null);
-
             if (materia == null) {
                 JOptionPane.showMessageDialog(this, "Materia no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -206,17 +213,111 @@ public class VerCarrera extends JPanel {
 
             if (carrera.getMaterias().contains(materia)) {
                 JOptionPane.showMessageDialog(this, "La materia ya se encuentra agregada a la carrera.", "Información", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                carrera.getMaterias().add(materia);
-                labelCantidadMaterias.setText("Cantidad de materias: " + carrera.getMaterias().size());
-                actualizarListaMaterias(carrera);
+                return;
+            }
 
-                JOptionPane.showMessageDialog(this, "Materia agregada a la carrera.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            int opcion = JOptionPane.showOptionDialog(this, "Tiene correlativas?", "Agregar Correlativas",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Si", "No"}, "No");
+
+
+            java.util.List<Materia> correlativasSeleccionadas = new java.util.ArrayList<>();
+            if (opcion == JOptionPane.YES_OPTION) {
+
+                java.util.List<Materia> todasMaterias = Universidad.getInstancia("Universidad Nacional Tierra del Fuego").getListaMaterias();
+                java.util.List<Materia> materiasFiltradas = todasMaterias.stream()
+                        .filter(m -> !m.getNombre().equals(materiaSeleccionada))
+                        .collect(java.util.stream.Collectors.toList());
+
+                final String[] nombresMaterias = new String[materiasFiltradas.size()];
+                for (int i = 0; i < materiasFiltradas.size(); i++) {
+                    nombresMaterias[i] = materiasFiltradas.get(i).getNombre();
+                }
+
+                JPanel panelCheckboxes = new JPanel();
+                panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS));
+
+                JCheckBox[] checkboxes = new JCheckBox[nombresMaterias.length];
+                for (int i = 0; i < nombresMaterias.length; i++) {
+                    checkboxes[i] = new JCheckBox(nombresMaterias[i]);
+                    panelCheckboxes.add(checkboxes[i]);
+                }
+
+                JScrollPane scrollPane = new JScrollPane(panelCheckboxes);
+                scrollPane.setPreferredSize(new Dimension(250, 150));
+
+                int result = JOptionPane.showConfirmDialog(this, scrollPane, "Seleccione la/s correlativas", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    for (int i = 0; i < checkboxes.length; i++) {
+                        if (checkboxes[i].isSelected()) {
+                            final int index = i;
+                            Materia correlativa = Universidad.getInstancia("Universidad Nacional Tierra del Fuego")
+                                    .getListaMaterias()
+                                    .stream()
+                                    .filter(m -> m.getNombre().equals(nombresMaterias[index]))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (correlativa != null) {
+                                correlativasSeleccionadas.add(correlativa);
+                            }
+                        }
+                    }
+                }
+            }
+            carrera.getMaterias().add(materia);
+            labelCantidadMaterias.setText("Cantidad de materias: " + carrera.getMaterias().size());
+            actualizarListaMaterias(carrera);
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                for (Materia m : correlativasSeleccionadas) {
+                    carrera.getPlanEstudio().grafoMaterias(materia, m);
+                }
+                String correlativasText = obtenerCorrelativas(carrera.getPlanEstudio().getGrafo());
+                textAreaPlanEstudio.setText(correlativasText);
+                textAreaPlanEstudio.revalidate();
+                textAreaPlanEstudio.repaint();
+            } else  if (opcion == JOptionPane.NO_OPTION) {
+                carrera.getPlanEstudio().grafoMaterias(materia, null);
+                String correlativasText = obtenerCorrelativas(carrera.getPlanEstudio().getGrafo());
+                textAreaPlanEstudio.setText(correlativasText);
+                textAreaPlanEstudio.revalidate();
+                textAreaPlanEstudio.repaint();
+            }
+
+            String mensaje = "Materia agregada a la carrera.";
+            if (!correlativasSeleccionadas.isEmpty()) {
+                StringBuilder sb = new StringBuilder("\nCorrelativas asignadas: ");
+                for (Materia corr : correlativasSeleccionadas) {
+                    sb.append(corr.getNombre()).append(", ");
+                }
+                mensaje += sb.substring(0, sb.length() - 2);
+            }
+
+
+            JOptionPane.showMessageDialog(this, mensaje, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        listaAgregarMaterias.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value,
+                                                          int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                Font fontNormal = new Font("Arial", Font.PLAIN, 14);
+                Font fontBold = new Font("Arial", Font.BOLD, 14);
+                if (value.toString().startsWith("Cuatrimestre")) {
+                    label.setFont(fontBold);
+                } else {
+                    label.setFont(fontNormal);
+                }
+                return label;
             }
         });
+
+
+        listaAgregarMaterias.setCellRenderer(rendererMaterias);
+        listaAgregarMaterias.setFont(new Font("Arial", Font.PLAIN, 14));;
         panelAgregarMaterias.add(btnAgregarMateria, BorderLayout.SOUTH);
         tabbedPane.addTab("Agregar Materias", panelAgregarMaterias);
-
 
         // Pestaña 4: Ver Plan de estudio con las materias y sus correlativas
         JPanel panelPlanEstudio = new JPanel(new BorderLayout());
@@ -332,9 +433,19 @@ public class VerCarrera extends JPanel {
 
     private void actualizarModeloAgregarMaterias(String filtro) {
         modeloAgregarMaterias.clear();
+        Map<Integer, List<Materia>> materiasPorCuatrimestre = new TreeMap<>();
         for (Materia materia : listaTodasMateriasCompleta) {
             if (materia.getNombre().toLowerCase().contains(filtro)) {
-                modeloAgregarMaterias.addElement(materia.getNombre());
+                int cuatrimestre = materia.getCuatrimestre();
+                materiasPorCuatrimestre.putIfAbsent(cuatrimestre, new ArrayList<>());
+                materiasPorCuatrimestre.get(cuatrimestre).add(materia);
+            }
+        }
+
+        for (Map.Entry<Integer, List<Materia>> entry : materiasPorCuatrimestre.entrySet()) {
+            modeloAgregarMaterias.addElement("Cuatrimestre " + entry.getKey() + ":");
+            for (Materia m : entry.getValue()) {
+                modeloAgregarMaterias.addElement(" - " + m.getNombre());
             }
         }
     }
